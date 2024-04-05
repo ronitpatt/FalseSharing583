@@ -1,6 +1,10 @@
 FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /n/eecs583a/home/aryanj/Fsharing/FsharingPass/Pass.cpp \
- /usr/include/stdc-predef.h /usr/local/include/llvm/IR/PassManager.h \
+ /usr/include/stdc-predef.h \
+ /n/eecs583a/home/aryanj/Fsharing/FsharingPass/Pass.h \
+ /usr/local/include/llvm/IR/InstVisitor.h \
+ /usr/local/include/llvm/IR/Function.h \
+ /usr/local/include/llvm/ADT/DenseSet.h \
  /usr/local/include/llvm/ADT/DenseMap.h \
  /usr/local/include/llvm/ADT/DenseMapInfo.h /usr/include/c++/11/cassert \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
@@ -188,15 +192,13 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
  /usr/include/c++/11/bits/nested_exception.h \
  /usr/include/c++/11/bits/streambuf.tcc \
- /usr/local/include/llvm/ADT/STLExtras.h \
- /usr/local/include/llvm/ADT/ADL.h /usr/local/include/llvm/ADT/Hashing.h \
- /usr/local/include/llvm/Support/SwapByteOrder.h \
- /usr/include/c++/11/optional \
- /usr/local/include/llvm/ADT/STLForwardCompat.h \
+ /usr/local/include/llvm/ADT/StringRef.h \
  /usr/local/include/llvm/ADT/STLFunctionalExtras.h \
- /usr/local/include/llvm/ADT/identity.h \
- /usr/local/include/llvm/ADT/iterator.h \
- /usr/local/include/llvm/ADT/iterator_range.h /usr/include/c++/11/memory \
+ /usr/local/include/llvm/ADT/STLForwardCompat.h \
+ /usr/include/c++/11/optional \
+ /usr/local/include/llvm/ADT/iterator_range.h \
+ /usr/local/include/llvm/ADT/ADL.h /usr/local/include/llvm/ADT/Twine.h \
+ /usr/local/include/llvm/ADT/SmallVector.h /usr/include/c++/11/memory \
  /usr/include/c++/11/bits/stl_raw_storage_iter.h \
  /usr/include/c++/11/bits/align.h /usr/include/c++/11/bit \
  /usr/include/c++/11/bits/unique_ptr.h \
@@ -209,23 +211,19 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/include/c++/11/bits/atomic_lockfree_defines.h \
  /usr/include/c++/11/backward/auto_ptr.h \
  /usr/include/c++/11/pstl/glue_memory_defs.h \
- /usr/local/include/llvm/ADT/SmallPtrSet.h \
- /usr/local/include/llvm/ADT/StringRef.h \
- /usr/local/include/llvm/ADT/TinyPtrVector.h \
- /usr/local/include/llvm/ADT/ArrayRef.h \
- /usr/local/include/llvm/ADT/SmallVector.h \
- /usr/local/include/llvm/ADT/PointerUnion.h \
- /usr/local/include/llvm/ADT/PointerIntPair.h \
- /usr/local/include/llvm/Support/Casting.h \
- /usr/local/include/llvm/IR/Function.h \
- /usr/local/include/llvm/ADT/DenseSet.h \
- /usr/local/include/llvm/ADT/Twine.h \
  /usr/local/include/llvm/ADT/ilist_node.h \
  /usr/local/include/llvm/ADT/ilist_node_base.h \
+ /usr/local/include/llvm/ADT/PointerIntPair.h \
  /usr/local/include/llvm/ADT/ilist_node_options.h \
  /usr/local/include/llvm/IR/Argument.h \
  /usr/local/include/llvm/IR/Attributes.h \
  /usr/local/include/llvm-c/Types.h /usr/local/include/llvm-c/ExternC.h \
+ /usr/local/include/llvm/ADT/ArrayRef.h \
+ /usr/local/include/llvm/ADT/Hashing.h \
+ /usr/local/include/llvm/Support/SwapByteOrder.h \
+ /usr/local/include/llvm/ADT/STLExtras.h \
+ /usr/local/include/llvm/ADT/identity.h \
+ /usr/local/include/llvm/ADT/iterator.h \
  /usr/local/include/llvm/ADT/BitmaskEnum.h \
  /usr/local/include/llvm/Support/Alignment.h \
  /usr/local/include/llvm/Support/CodeGen.h \
@@ -235,6 +233,7 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/local/include/llvm/IR/Attributes.inc \
  /usr/local/include/llvm/IR/Value.h /usr/local/include/llvm/IR/Use.h \
  /usr/local/include/llvm/Support/CBindingWrapping.h \
+ /usr/local/include/llvm/Support/Casting.h \
  /usr/local/include/llvm/IR/Value.def \
  /usr/local/include/llvm/IR/BasicBlock.h \
  /usr/local/include/llvm/ADT/ilist.h \
@@ -246,6 +245,7 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/local/include/llvm/IR/DebugLoc.h \
  /usr/local/include/llvm/IR/TrackingMDRef.h \
  /usr/local/include/llvm/IR/Metadata.h \
+ /usr/local/include/llvm/ADT/PointerUnion.h \
  /usr/local/include/llvm/IR/Constant.h /usr/local/include/llvm/IR/User.h \
  /usr/local/include/llvm/IR/LLVMContext.h \
  /usr/local/include/llvm/IR/DiagnosticHandler.h \
@@ -263,38 +263,57 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/local/include/llvm/Support/MD5.h \
  /usr/local/include/llvm/Support/Endian.h \
  /usr/local/include/llvm/IR/OperandTraits.h \
- /usr/local/include/llvm/IR/Module.h \
+ /usr/local/include/llvm/IR/Instructions.h \
+ /usr/local/include/llvm/ADT/MapVector.h /usr/local/include/llvm/IR/CFG.h \
+ /usr/local/include/llvm/ADT/GraphTraits.h \
+ /usr/local/include/llvm/IR/InstrTypes.h \
  /usr/local/include/llvm/ADT/StringMap.h \
  /usr/local/include/llvm/ADT/StringMapEntry.h \
  /usr/local/include/llvm/Support/AllocatorBase.h \
- /usr/local/include/llvm/IR/Comdat.h \
- /usr/local/include/llvm/IR/DataLayout.h \
+ /usr/local/include/llvm/IR/IntrinsicInst.h \
+ /usr/local/include/llvm/IR/Constants.h \
+ /usr/local/include/llvm/ADT/APFloat.h \
  /usr/local/include/llvm/ADT/APInt.h \
- /usr/local/include/llvm/Support/TrailingObjects.h \
- /usr/local/include/llvm/IR/GlobalAlias.h \
- /usr/local/include/llvm/IR/GlobalIFunc.h \
- /usr/local/include/llvm/IR/GlobalVariable.h \
- /usr/local/include/llvm/IR/ProfileSummary.h \
- /usr/local/include/llvm/IR/PassInstrumentation.h \
- /usr/local/include/llvm/ADT/Any.h \
- /usr/local/include/llvm/ADT/FunctionExtras.h \
- /usr/local/include/llvm/IR/PassManagerInternal.h \
- /usr/local/include/llvm/Support/TimeProfiler.h \
+ /usr/local/include/llvm/ADT/FloatingPointMode.h \
+ /usr/local/include/llvm/ADT/StringSwitch.h \
+ /usr/local/include/llvm/IR/DebugInfoMetadata.h \
+ /usr/local/include/llvm/Support/CommandLine.h \
+ /usr/local/include/llvm/ADT/SmallPtrSet.h \
+ /usr/local/include/llvm/Support/ManagedStatic.h \
+ /usr/include/c++/11/atomic /usr/local/include/llvm/Support/StringSaver.h \
+ /usr/local/include/llvm/Support/Allocator.h \
+ /usr/local/include/llvm/Support/Discriminator.h \
  /usr/local/include/llvm/Support/Error.h \
  /usr/local/include/llvm-c/Error.h \
  /usr/local/include/llvm/Support/Debug.h \
  /usr/local/include/llvm/Support/ErrorOr.h \
  /usr/local/include/llvm/Support/Format.h \
+ /usr/local/include/llvm/IR/DebugInfoFlags.def \
+ /usr/local/include/llvm/IR/FPEnv.h /usr/local/include/llvm/IR/FMF.h \
+ /usr/local/include/llvm/IR/GlobalVariable.h \
+ /usr/local/include/llvm/IR/Intrinsics.h \
+ /usr/local/include/llvm/IR/IntrinsicEnums.inc \
+ /usr/local/include/llvm/IR/Module.h /usr/local/include/llvm/IR/Comdat.h \
+ /usr/local/include/llvm/IR/DataLayout.h \
+ /usr/local/include/llvm/Support/TrailingObjects.h \
+ /usr/local/include/llvm/IR/GlobalAlias.h \
+ /usr/local/include/llvm/IR/GlobalIFunc.h \
+ /usr/local/include/llvm/IR/ProfileSummary.h \
+ /usr/local/include/llvm/IR/PassManager.h \
+ /usr/local/include/llvm/ADT/TinyPtrVector.h \
+ /usr/local/include/llvm/IR/PassInstrumentation.h \
+ /usr/local/include/llvm/ADT/Any.h \
+ /usr/local/include/llvm/ADT/FunctionExtras.h \
+ /usr/local/include/llvm/IR/PassManagerInternal.h \
+ /usr/local/include/llvm/Support/TimeProfiler.h \
  /usr/local/include/llvm/Support/TypeName.h /usr/include/c++/11/list \
  /usr/include/c++/11/bits/stl_list.h /usr/include/c++/11/bits/list.tcc \
  /usr/local/include/llvm/Passes/PassBuilder.h \
  /usr/local/include/llvm/Analysis/CGSCCPassManager.h \
- /usr/local/include/llvm/ADT/MapVector.h \
  /usr/local/include/llvm/Analysis/LazyCallGraph.h \
  /usr/local/include/llvm/ADT/SetVector.h \
  /usr/local/include/llvm/Analysis/TargetLibraryInfo.h \
- /usr/local/include/llvm/ADT/BitVector.h \
- /usr/local/include/llvm/IR/InstrTypes.h /usr/local/include/llvm/Pass.h \
+ /usr/local/include/llvm/ADT/BitVector.h /usr/local/include/llvm/Pass.h \
  /usr/local/include/llvm/PassAnalysisSupport.h \
  /usr/local/include/llvm/PassSupport.h /usr/local/include/llvm/PassInfo.h \
  /usr/local/include/llvm/PassRegistry.h \
@@ -308,12 +327,10 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/local/include/llvm/TargetParser/Triple.h \
  /usr/local/include/llvm/Support/VersionTuple.h \
  /usr/local/include/llvm/Analysis/TargetLibraryInfo.def \
- /usr/local/include/llvm/Support/Allocator.h \
  /usr/local/include/llvm/IR/ValueHandle.h \
  /usr/local/include/llvm/Passes/OptimizationLevel.h \
  /usr/local/include/llvm/Support/PGOOptions.h \
  /usr/local/include/llvm/ADT/IntrusiveRefCntPtr.h \
- /usr/include/c++/11/atomic \
  /usr/local/include/llvm/Transforms/IPO/Inliner.h \
  /usr/local/include/llvm/Analysis/InlineAdvisor.h \
  /usr/local/include/llvm/Analysis/InlineCost.h \
@@ -325,7 +342,6 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/local/include/llvm/Support/FormatCommon.h \
  /usr/local/include/llvm/Support/FormatVariadicDetails.h \
  /usr/local/include/llvm/Support/FormatProviders.h \
- /usr/local/include/llvm/ADT/StringSwitch.h \
  /usr/local/include/llvm/Support/NativeFormatting.h \
  /usr/include/c++/11/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
@@ -354,26 +370,11 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/local/include/llvm/Analysis/Utils/ImportedFunctionsInliningStatistics.h \
  /usr/local/include/llvm/Transforms/IPO/ModuleInliner.h \
  /usr/local/include/llvm/Transforms/Instrumentation.h \
- /usr/local/include/llvm/IR/DebugInfoMetadata.h \
- /usr/local/include/llvm/IR/Constants.h \
- /usr/local/include/llvm/ADT/APFloat.h \
- /usr/local/include/llvm/ADT/FloatingPointMode.h \
- /usr/local/include/llvm/Support/CommandLine.h \
- /usr/local/include/llvm/Support/ManagedStatic.h \
- /usr/local/include/llvm/Support/StringSaver.h \
- /usr/local/include/llvm/Support/Discriminator.h \
- /usr/local/include/llvm/IR/DebugInfoFlags.def \
  /usr/local/include/llvm/IR/IRBuilder.h \
  /usr/local/include/llvm/IR/ConstantFolder.h \
  /usr/local/include/llvm/IR/ConstantFold.h \
  /usr/local/include/llvm/IR/IRBuilderFolder.h \
- /usr/local/include/llvm/IR/Operator.h /usr/local/include/llvm/IR/FMF.h \
- /usr/local/include/llvm/IR/FPEnv.h \
- /usr/local/include/llvm/IR/Instructions.h \
- /usr/local/include/llvm/IR/CFG.h \
- /usr/local/include/llvm/ADT/GraphTraits.h \
- /usr/local/include/llvm/IR/Intrinsics.h \
- /usr/local/include/llvm/IR/IntrinsicEnums.inc \
+ /usr/local/include/llvm/IR/Operator.h \
  /usr/local/include/llvm/Transforms/Scalar/LoopPassManager.h \
  /usr/local/include/llvm/ADT/PriorityWorklist.h \
  /usr/local/include/llvm/Analysis/LoopAnalysisManager.h \
@@ -391,7 +392,6 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: \
  /usr/local/include/llvm/Transforms/Utils/LoopSimplify.h \
  /usr/local/include/llvm/Transforms/Utils/LoopUtils.h \
  /usr/local/include/llvm/Analysis/IVDescriptors.h \
- /usr/local/include/llvm/IR/IntrinsicInst.h \
  /usr/local/include/llvm/Analysis/LoopAccessAnalysis.h \
  /usr/local/include/llvm/ADT/EquivalenceClasses.h \
  /usr/local/include/llvm/Analysis/ScalarEvolutionExpressions.h \
