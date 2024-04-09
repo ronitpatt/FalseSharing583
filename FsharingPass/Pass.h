@@ -110,26 +110,28 @@ public:
         errs() << "---------\n";
         errs() << "Before\n";
         errs() << GEP << "\n";
-        
+                
         if (GEP.getSourceElementType()->isArrayTy()) {
             Type* rettype = recur(GEP.getSourceElementType());
-            // errs() << "--- array type gep\n";
-            // errs() << GEP << "\n";
-            // errs() << *GEP.getSourceElementType() << " type"<< "\n";
-            // errs() << *rettype << " rettype"<< "\n";
-            GEP.setSourceElementType(rettype);
-            // errs() << GEP << "\n";
-            // errs() << "---\n";
+            
+            std::vector<llvm::Value*> idxList(GEP.idx_begin(), GEP.idx_end());
+
+            llvm::GetElementPtrInst* newGEP = llvm::GetElementPtrInst::CreateInBounds(
+                rettype, GEP.getPointerOperand(), idxList,
+                GEP.getName(), &GEP);
+
+            // GetElementPtrInst& cloned = *newGEP;
+            // cloned.copyMetadata(GEP);
+            // cloned.moveBefore(&GEP);
+
+            GEP.replaceAllUsesWith(newGEP);
+            GEP.eraseFromParent();
+
+            errs() << "After\n";
+            errs() << *newGEP << "\n";
         }
         
         if (oldType == GEP.getSourceElementType()) {
-            // errs() << "--- old type == source element type\n";
-            // errs() << GEP << "\n";
-            // errs() << *GEP.getSourceElementType() << " type"<< "\n";
-            // errs() << *newType << " type"<< "\n";
-            // errs() << *GEP.getOperand(1) << " operand 1\n";
-            // errs() << "---\n";
-
             GEP.setSourceElementType(newType);
             Value *OffsetValue = GEP.getOperand(2);
             int64_t Offset = dyn_cast<ConstantInt>(OffsetValue)->getSExtValue();
@@ -137,10 +139,12 @@ public:
             Type *NewOffsetType = IntegerType::get(GEP.getContext(), 32);
             Constant *NewOffsetConstant = ConstantInt::get(NewOffsetType, NewOffsetValue);            
             GEP.setOperand(2, NewOffsetConstant);
+
+            errs() << "After\n";
+            errs() << GEP << "\n";
         }
        
-        errs() << "After\n";
-        errs() << GEP << "\n";
+        
 
     }
 
