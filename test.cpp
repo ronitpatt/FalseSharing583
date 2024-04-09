@@ -10,14 +10,22 @@ int main()
 {
   c arr[4];
 
-  for (int i = 0; i<4; i++){
+  for (int i = 0; i<12; i++){
     arr[i].front = 888;
-
   }
   // c a;
   // arr[0].front = 0;
   
-  
+  bool even = (fork() == 0);
+
+
+  for (int i = 0; i<6; i++){
+    if (even) {
+      printf("%d", arr[i*2].front);
+    } else {
+      printf("%d", arr[i*2+1].front);
+    }
+  }
 
   // for (int i = 0; i < 4; i+=1) {
   //   printf("%d %d %d\n", arr[i].front, arr[i].c1, arr[i].array[1]);

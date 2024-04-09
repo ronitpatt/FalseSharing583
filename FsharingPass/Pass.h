@@ -112,17 +112,13 @@ public:
         errs() << GEP << "\n";
                 
         if (GEP.getSourceElementType()->isArrayTy()) {
-            Type* rettype = recur(GEP.getSourceElementType());
+            Type* ret_type = recur(GEP.getSourceElementType());
             
             std::vector<llvm::Value*> idxList(GEP.idx_begin(), GEP.idx_end());
 
             llvm::GetElementPtrInst* newGEP = llvm::GetElementPtrInst::CreateInBounds(
-                rettype, GEP.getPointerOperand(), idxList,
+                ret_type, GEP.getPointerOperand(), idxList,
                 GEP.getName(), &GEP);
-
-            // GetElementPtrInst& cloned = *newGEP;
-            // cloned.copyMetadata(GEP);
-            // cloned.moveBefore(&GEP);
 
             GEP.replaceAllUsesWith(newGEP);
             GEP.eraseFromParent();
@@ -133,12 +129,12 @@ public:
         
         if (oldType == GEP.getSourceElementType()) {
             GEP.setSourceElementType(newType);
-            Value *OffsetValue = GEP.getOperand(2);
-            int64_t Offset = dyn_cast<ConstantInt>(OffsetValue)->getSExtValue();
-            int NewOffsetValue = getOffset(Offset);
-            Type *NewOffsetType = IntegerType::get(GEP.getContext(), 32);
-            Constant *NewOffsetConstant = ConstantInt::get(NewOffsetType, NewOffsetValue);            
-            GEP.setOperand(2, NewOffsetConstant);
+            Value *offset_value = GEP.getOperand(2);
+            int64_t offset = dyn_cast<ConstantInt>(offset_value)->getSExtValue();
+            int new_offset_value = getOffset(offset);
+            Type *new_offset_type = IntegerType::get(GEP.getContext(), 32);
+            Constant *new_offset_constant = ConstantInt::get(new_offset_type, new_offset_value);            
+            GEP.setOperand(2, new_offset_constant);
 
             errs() << "After\n";
             errs() << GEP << "\n";
