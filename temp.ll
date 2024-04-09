@@ -1,8 +1,9 @@
-; ModuleID = 'test.bc'
+; ModuleID = 'test.cpp'
 source_filename = "test.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+%struct.c = type { i32 }
 %struct.cpadded = type { i32, [60 x i8] }
 
 @.str = private unnamed_addr constant [25 x i8] c"-----------------------\0A\00", align 1
@@ -30,7 +31,7 @@ define dso_local noundef i32 @main() #0 {
   %11 = sext i32 %10 to i64
   %12 = getelementptr inbounds [4 x %struct.cpadded], ptr %2, i64 0, i64 %11
   %13 = getelementptr inbounds %struct.cpadded, ptr %12, i32 0, i32 0
-  store i32 888, ptr %13, align 16
+  store i32 888, ptr %13, align 4
   br label %14
 
 14:                                               ; preds = %9

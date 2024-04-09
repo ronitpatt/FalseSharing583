@@ -3,16 +3,16 @@ source_filename = "test.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.c = type { i32, [60 x i8] }
+%class.c = type { i32 }
 
 ; Function Attrs: mustprogress noinline norecurse nounwind uwtable
 define dso_local noundef i32 @main() #0 {
   %1 = alloca i32, align 4
-  %2 = alloca [4 x %struct.c], align 16
+  %2 = alloca [4 x %class.c], align 16
+  %3 = alloca ptr, align 8
   store i32 0, ptr %1, align 4
-  %3 = getelementptr inbounds [4 x %struct.c], ptr %2, i64 0, i64 0
-  %4 = getelementptr inbounds %struct.c, ptr %3, i32 0, i32 0
-  store i32 0, ptr %4, align 16
+  %4 = getelementptr inbounds [4 x %class.c], ptr %2, i64 0, i64 0
+  store ptr %4, ptr %3, align 8
   ret i32 1
 }
 

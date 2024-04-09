@@ -1,26 +1,36 @@
 #include <stdio.h>
+#include <unistd.h>
 
 struct c {
-  int a1; 
-  int a2; 
+    int front;
+    char padding[60];
 }; // is it ok to pad this inside struct
+
 
 int main()
 {
-  c f;
-  f.a1 = 3;
-  f.a2 = 9;
-  // allocate 128 bytes for F
-  // memcpy temp to F
+  c arr[4];
+  // c a;
+  arr[0].front = 0;
   
-  // printf("%d\n", f.a1);
-  // printf("%d\n", f.a2);
   
 
-  char *buff = (char*)&f;
+  // for (int i = 0; i < 4; i+=1) {
+  //   //printf("%d %d %d\n", arr[i].front, arr[i].c1, arr[i].array[1]);
+  // }
+  //c* a= &(arr[0]);
+  // int *buff = (int*)&arr;
 
-  for (int i = 0; i < 128; i+=4) {
-    printf("%u %d \n", i, buff[i]);
- }
+  // for (int i = 0; i<4; i++){
+  //   arr[i].front = 888;
+  // }
+  
+  // for (int i = 0; i < 64*4; i+=1) {
+  //   if (i*4 %64 == 0) {
+  //     printf("-----------------------\n");
+  //   }
+  //   printf("%d %d \n", i, buff[i]);
+  // }
+
   return 1;
 }

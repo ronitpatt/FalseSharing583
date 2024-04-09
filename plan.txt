@@ -1,1 +1,18 @@
-find alloca increase size
+find struct names
+
+once structs are copied, functions will not be copied
+have to make a copy function
+change the old function calls to new function calls
+
+
+check for no functions
+find all class names
+find all functions
+parse the function anme to match with class
+
+
+padd targets file
+
+
+
+

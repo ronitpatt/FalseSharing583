@@ -18,70 +18,132 @@ public:
     ReplaceTypeVisitor(StructType* Old, StructType* New) : oldType(Old), newType(New) {}
 
     void visitInstruction(Instruction &I) {
-        // for (Use &U : I.operands()) {
-        //     if (auto *OpTy = dyn_cast<PointerType>(U->getType())) {
-        //         if (OpTy->getElementType() == oldType) {
-        //             U.set(PointerType::get(newType, OpTy->getAddressSpace()));
-        //         }
-        //     }
-        // }
+        // errs() << I << "\n";
     }
+    Type* recur(Type *t) {
+        if (t->isArrayTy()) {
+            //errs() << "Array\n";
+            ArrayType *AT = dyn_cast<ArrayType>(t);
+            Type *ET = AT->getElementType();
+            //errs() << *ET << "\n";
+            Type* ret = recur(ET);
+            ArrayType *ArrType = ArrayType::get(newType, AT->getNumElements());
+            return ArrType;
+        } else {
+            if (t == oldType) {
+                return newType;
+            }
+            return t;
+        }
+        
+    }
+    
     void visitAllocaInst(AllocaInst &AI) {
+        // errs() << AI << "\n";
+        errs() << "---------\n";
+        errs() << "Before" << "\n";
+        errs() << AI << "\n";
+        if (AI.getAllocatedType()->isArrayTy()) {
+            Type* rettype = recur(AI.getAllocatedType());
+            // errs() << "--- array type alloca\n";
+            // errs() << AI << "\n";
+            // errs() << *AI.getAllocatedType() << " type"<< "\n";
+            // errs() << *rettype << " rettype"<< "\n";
+            AI.setAllocatedType(rettype);
+            //AI.setAlignment(Align(16));???
+            
+            
+            
+        }
+
         if (AI.getAllocatedType() == oldType) {
             AI.setAllocatedType(newType);
         }
+        errs() << "After" << "\n";
+        errs() << AI << "\n";
     }
+
     int getOffset(int oldOffset) {
         auto oldelems = oldType->elements();
         Type* oldT = oldelems[oldOffset];
         std::vector<Type*> newelems = newType->elements();
         int paddingAdded = 0;
-        int curroffset = -1;
-        for (int i = 0; i < oldelems.size(); ++i) {
-            if (oldelems[i] != newelems[i]) {
-                paddingAdded++;
-                errs() << "padding" << "\n";
+        int curroffset = 0;
+        // old = {int, bool, int}
+        // new = {int, padd, bool, padd, int, padd}
+
+        // std::map<Type*, int> old_type_count;
+        // std::map<Type*, int> new_type_count;
+        // for (int i = 0; i<oldOffset; i++) {
+        //     old_type_count[oldelems[i]]++;
+        // }
+
+        
+        int oldCounter = 0;
+        int newcounter = 0;
+        for (NULL ; newcounter < newelems.size(); ++newcounter) {
+            // if (old_type_count.find(newelems[newcounter]) != old_type_count.end()) {
+            //     new_type_count[newelems[newcounter]]++;
+            // }
+            // bool same = old_type_count[oldelems[oldCounter]] == new_type_count[newelems[newcounter]];
+
+            if (oldelems[oldCounter] != newelems[newcounter]) { // || !same
+                paddingAdded++; // padding
             } else {
-                curroffset++;
+                oldCounter++;
             }
-            
-            if (curroffset == oldOffset) {
-                return oldOffset + paddingAdded;
+
+            if (oldCounter > oldOffset) { // curroffset = 1 means u are looking at new structs 1 index type
+                //errs() << newcounter << "RET \n";
+                return newcounter;
             }
-            
         }
-        return oldOffset + paddingAdded;
+        
+        //errs() << oldOffset + paddingAdded << "RET 1\n";
+        return newcounter; //newcounter
         
     }
     
+    
+
     void visitGetElementPtrInst(GetElementPtrInst &GEP) {
-        if (GEP.getSourceElementType() == oldType) {
-            
+        errs() << "---------\n";
+        errs() << "Before\n";
+        errs() << GEP << "\n";
+        
+        if (GEP.getSourceElementType()->isArrayTy()) {
+            Type* rettype = recur(GEP.getSourceElementType());
+            // errs() << "--- array type gep\n";
+            // errs() << GEP << "\n";
+            // errs() << *GEP.getSourceElementType() << " type"<< "\n";
+            // errs() << *rettype << " rettype"<< "\n";
+            GEP.setSourceElementType(rettype);
+            // errs() << GEP << "\n";
+            // errs() << "---\n";
+        }
+        
+        if (oldType == GEP.getSourceElementType()) {
+            // errs() << "--- old type == source element type\n";
+            // errs() << GEP << "\n";
+            // errs() << *GEP.getSourceElementType() << " type"<< "\n";
+            // errs() << *newType << " type"<< "\n";
+            // errs() << *GEP.getOperand(1) << " operand 1\n";
+            // errs() << "---\n";
+
             GEP.setSourceElementType(newType);
-            //errs() << "numIndices " <<  GEP.getNumIndices() << "\n";
-            //errs() << "pointerAddressSpace " <<  GEP.getPointerAddressSpace() << "\n";
-            //errs() << "addressSpace " <<  GEP.getAddressSpace() << "\n";
-             // Example: 32-bit integer type
             Value *OffsetValue = GEP.getOperand(2);
-             // Example new offset value
-            // Set the new offset value
             int64_t Offset = dyn_cast<ConstantInt>(OffsetValue)->getSExtValue();
             int NewOffsetValue = getOffset(Offset);
-            errs() << "Calculated offset " << NewOffsetValue << "\n";
-            //NewOffsetValue = 2*Offset;
             Type *NewOffsetType = IntegerType::get(GEP.getContext(), 32);
-            Constant *NewOffsetConstant = ConstantInt::get(NewOffsetType, NewOffsetValue);
+            Constant *NewOffsetConstant = ConstantInt::get(NewOffsetType, NewOffsetValue);            
             GEP.setOperand(2, NewOffsetConstant);
-            // Handle updating the types in GEP indices if needed
-            // for (Use &U : GEP.indices()) {
-            //     if (auto *OpTy = dyn_cast<IntegerType>(U->getType())) {
-            //         // Update index types if necessary
-            //         // Example: U.set(IntegerType::get(GEP.getContext(), 64));
-            //     }
-            // }
         }
+       
+        errs() << "After\n";
+        errs() << GEP << "\n";
+
     }
+
     
 };
-
-}
+};
