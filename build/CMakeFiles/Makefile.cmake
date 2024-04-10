@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "../CMakeLists.txt"
-  "../FsharingPass/CMakeLists.txt"
+  "../GTPass/CMakeLists.txt"
   "CMakeFiles/3.22.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeSystem.cmake"
@@ -62,7 +62,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
-  "FsharingPass/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "GTPass/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -71,7 +71,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/omp_gen.dir/DependInfo.cmake"
   "CMakeFiles/acc_gen.dir/DependInfo.cmake"
   "CMakeFiles/RISCVTargetParserTableGen.dir/DependInfo.cmake"
-  "FsharingPass/CMakeFiles/FsharingPass.dir/DependInfo.cmake"
-  "FsharingPass/CMakeFiles/install-FsharingPass.dir/DependInfo.cmake"
-  "FsharingPass/CMakeFiles/install-FsharingPass-stripped.dir/DependInfo.cmake"
+  "GTPass/CMakeFiles/GTPass.dir/DependInfo.cmake"
+  "GTPass/CMakeFiles/install-GTPass.dir/DependInfo.cmake"
+  "GTPass/CMakeFiles/install-GTPass-stripped.dir/DependInfo.cmake"
   )

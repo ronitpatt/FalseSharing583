@@ -2,36 +2,27 @@
 #include <unistd.h>
 
 struct c {
-    int front;
-  }; // is it ok to pad this inside struct
+  int a[4];
+  int b[4];
+  int c[4];
+};
+c obj;
 
+
+// struct c_elem {
+//   int a;
+//   int b;
+//   int c;
+// };
+// c_elem arr[3];
 
 int main()
 {
-  c arr[4];
-
-  for (int i = 0; i<4; i++){
-    arr[i].front = 888;
-
-  }
-  // c a;
-  // arr[0].front = 0;
-  
-  
-
-  // for (int i = 0; i < 4; i+=1) {
-  //   printf("%d %d %d\n", arr[i].front, arr[i].c1, arr[i].array[1]);
-  // }
-  //c* a= &(arr[0]);
-
-  int *buff = (int*)&arr;
-  
-  for (int i = 0; i < 64*4; i+=1) {
-    if (i*4 %64 == 0) {
-      printf("-----------------------\n");
-    }
-    printf("%d %d \n", i, buff[i]);
-  }
-
+  /*
+  Before
+  obj.a[3];
+  newobj[3].a;
+  */
+  int a = obj.a[3];
   return 1;
 }

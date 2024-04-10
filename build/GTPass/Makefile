@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /n/eecs583a/home/aryanj/GT/build/CMakeFiles /n/eecs583a/home/aryanj/GT/build//CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /n/eecs583a/home/aryanj/GT/build && $(CMAKE_COMMAND) -E cmake_progress_start /n/eecs583a/home/aryanj/GT/build/CMakeFiles /n/eecs583a/home/aryanj/GT/build/GTPass//CMakeFiles/progress.marks
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /n/eecs583a/home/aryanj/GT/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,109 +148,84 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /n/eecs583a/home/aryanj/GT/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named intrinsics_gen
+# Convenience name for target.
+GTPass/CMakeFiles/GTPass.dir/rule:
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass/CMakeFiles/GTPass.dir/rule
+.PHONY : GTPass/CMakeFiles/GTPass.dir/rule
 
-# Build rule for target.
-intrinsics_gen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 intrinsics_gen
-.PHONY : intrinsics_gen
-
-# fast build rule for target.
-intrinsics_gen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/intrinsics_gen.dir/build.make CMakeFiles/intrinsics_gen.dir/build
-.PHONY : intrinsics_gen/fast
-
-#=============================================================================
-# Target rules for targets named omp_gen
-
-# Build rule for target.
-omp_gen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 omp_gen
-.PHONY : omp_gen
-
-# fast build rule for target.
-omp_gen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/omp_gen.dir/build.make CMakeFiles/omp_gen.dir/build
-.PHONY : omp_gen/fast
-
-#=============================================================================
-# Target rules for targets named acc_gen
-
-# Build rule for target.
-acc_gen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 acc_gen
-.PHONY : acc_gen
-
-# fast build rule for target.
-acc_gen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/acc_gen.dir/build.make CMakeFiles/acc_gen.dir/build
-.PHONY : acc_gen/fast
-
-#=============================================================================
-# Target rules for targets named RISCVTargetParserTableGen
-
-# Build rule for target.
-RISCVTargetParserTableGen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 RISCVTargetParserTableGen
-.PHONY : RISCVTargetParserTableGen
-
-# fast build rule for target.
-RISCVTargetParserTableGen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/RISCVTargetParserTableGen.dir/build.make CMakeFiles/RISCVTargetParserTableGen.dir/build
-.PHONY : RISCVTargetParserTableGen/fast
-
-#=============================================================================
-# Target rules for targets named GTPass
-
-# Build rule for target.
-GTPass: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass
+# Convenience name for target.
+GTPass: GTPass/CMakeFiles/GTPass.dir/rule
 .PHONY : GTPass
 
 # fast build rule for target.
 GTPass/fast:
-	$(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/GTPass.dir/build.make GTPass/CMakeFiles/GTPass.dir/build
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/GTPass.dir/build.make GTPass/CMakeFiles/GTPass.dir/build
 .PHONY : GTPass/fast
 
-#=============================================================================
-# Target rules for targets named install-GTPass
+# Convenience name for target.
+GTPass/CMakeFiles/install-GTPass.dir/rule:
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass/CMakeFiles/install-GTPass.dir/rule
+.PHONY : GTPass/CMakeFiles/install-GTPass.dir/rule
 
-# Build rule for target.
-install-GTPass: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-GTPass
+# Convenience name for target.
+install-GTPass: GTPass/CMakeFiles/install-GTPass.dir/rule
 .PHONY : install-GTPass
 
 # fast build rule for target.
 install-GTPass/fast:
-	$(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/install-GTPass.dir/build.make GTPass/CMakeFiles/install-GTPass.dir/build
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/install-GTPass.dir/build.make GTPass/CMakeFiles/install-GTPass.dir/build
 .PHONY : install-GTPass/fast
 
-#=============================================================================
-# Target rules for targets named install-GTPass-stripped
+# Convenience name for target.
+GTPass/CMakeFiles/install-GTPass-stripped.dir/rule:
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GTPass/CMakeFiles/install-GTPass-stripped.dir/rule
+.PHONY : GTPass/CMakeFiles/install-GTPass-stripped.dir/rule
 
-# Build rule for target.
-install-GTPass-stripped: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-GTPass-stripped
+# Convenience name for target.
+install-GTPass-stripped: GTPass/CMakeFiles/install-GTPass-stripped.dir/rule
 .PHONY : install-GTPass-stripped
 
 # fast build rule for target.
 install-GTPass-stripped/fast:
-	$(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/install-GTPass-stripped.dir/build.make GTPass/CMakeFiles/install-GTPass-stripped.dir/build
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/install-GTPass-stripped.dir/build.make GTPass/CMakeFiles/install-GTPass-stripped.dir/build
 .PHONY : install-GTPass-stripped/fast
+
+Pass.o: Pass.cpp.o
+.PHONY : Pass.o
+
+# target to build an object file
+Pass.cpp.o:
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/GTPass.dir/build.make GTPass/CMakeFiles/GTPass.dir/Pass.cpp.o
+.PHONY : Pass.cpp.o
+
+Pass.i: Pass.cpp.i
+.PHONY : Pass.i
+
+# target to preprocess a source file
+Pass.cpp.i:
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/GTPass.dir/build.make GTPass/CMakeFiles/GTPass.dir/Pass.cpp.i
+.PHONY : Pass.cpp.i
+
+Pass.s: Pass.cpp.s
+.PHONY : Pass.s
+
+# target to generate assembly for a file
+Pass.cpp.s:
+	cd /n/eecs583a/home/aryanj/GT/build && $(MAKE) $(MAKESILENT) -f GTPass/CMakeFiles/GTPass.dir/build.make GTPass/CMakeFiles/GTPass.dir/Pass.cpp.s
+.PHONY : Pass.cpp.s
 
 # Help Target
 help:
@@ -264,13 +239,12 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... RISCVTargetParserTableGen"
-	@echo "... acc_gen"
 	@echo "... install-GTPass"
 	@echo "... install-GTPass-stripped"
-	@echo "... intrinsics_gen"
-	@echo "... omp_gen"
 	@echo "... GTPass"
+	@echo "... Pass.o"
+	@echo "... Pass.i"
+	@echo "... Pass.s"
 .PHONY : help
 
 
@@ -282,6 +256,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /n/eecs583a/home/aryanj/GT/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
