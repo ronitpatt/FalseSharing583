@@ -3,16 +3,16 @@ source_filename = "test.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.c = type { [4 x i32], [4 x i32], [4 x i32] }
+%struct.c_elem = type { i32, i32, i32 }
 
-@obj = dso_local global %struct.c zeroinitializer, align 4
+@arr = dso_local global [3 x %struct.c_elem] zeroinitializer, align 16
 
 ; Function Attrs: mustprogress noinline norecurse nounwind uwtable
 define dso_local noundef i32 @main() #0 {
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
   store i32 0, ptr %1, align 4
-  %3 = load i32, ptr getelementptr inbounds ([4 x i32], ptr @obj, i64 0, i64 3), align 4
+  %3 = load i32, ptr getelementptr inbounds ([3 x %struct.c_elem], ptr @arr, i64 0, i64 2, i32 1), align 4
   store i32 %3, ptr %2, align 4
   ret i32 1
 }

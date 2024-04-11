@@ -15,7 +15,7 @@ padd targets file
 
 
 %3 = load i32, ptr getelementptr inbounds ([4 x i32], ptr @obj, i64 0, i64 3), align 4
-%3 = load i32, ptr getelementptr inbounds ([3 x %struct.c_elem], ptr @arr, i64 0, i64 2, i32 1), align 4
+%3 = load i32, ptr getelementptr inbounds ([3 x %struct.cGT], ptr @arr, i64 0, i64 2, i32 1), align 4
 
 
 

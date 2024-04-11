@@ -13,7 +13,6 @@ class ReplaceTypeVisitor : public InstVisitor<ReplaceTypeVisitor> {
 private:
     StructType* oldType;
     StructType* newType;
-
     Value* globalVar;
 
 public:
@@ -22,7 +21,7 @@ public:
     void visitInstruction(Instruction &I) {
         // errs() << I << "\n";
         // errs() << I << "\n";
-        // if (!dyn_cast<GetElementPtrInst>(&I)){
+        // if (!dyn_cast<GetElementPtrInst>(&I)) {
         //     return;
         // }
 
@@ -57,16 +56,23 @@ public:
         gepIndices.push_back(builder.getInt32(1));
         //GetElementPtrInst *gepInst = builder.CreateGEP(newType, globalVar, gepIndices, "gep");
         //GetElementPtrInst *gepInst = builder.CreateGEP(globalVar->getType(), globalVar, gepIndices, "gep"); 
+        PointerType *pointerType = dyn_cast<PointerType>(globalVar->getType());
+        errs() << *pointerType << "\n";
+        ArrayType* gVtype = ArrayType::get(newType, 3);
         llvm::GetElementPtrInst* gepInst = llvm::GetElementPtrInst::CreateInBounds(
-                newType, globalVar, gepIndices,
-                "name");
+            gVtype, globalVar, gepIndices, "hi");
+        errs() << *gepInst << "\n";
         Type *loadType = L.getType();
-        errs() << *loadType << "\n";
-        LoadInst *newLoadInst = builder.CreateLoad( loadType, 
-                                                    L.getPointerOperand()
-                                                    //(Value *)gepInst
-                                                    , "newLoad");
-        newLoadInst->insertBefore(&L);
+        errs() << *loadType  << " " <<*L.getPointerOperand()<< "\n";
+        LoadInst* newL = (LoadInst*)L.clone();
+        
+        newL->insertBefore(&L);
+        gepInst->insertBefore(newL);
+        newL->setOperand(0,gepInst);
+        errs() << *newL->getOperand(0)<< "OP \n";
+        //errs() << * builder.CreateLoad(L.getType(),(Value*)L.getPointerOperand(),"hi") << "\n";
+        //errs() << *newLoadInst << "HELLO \n";
+        //newLoadInst->insertBefore(&L);
         
         
         
