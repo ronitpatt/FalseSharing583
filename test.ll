@@ -1,25 +1,20 @@
-; ModuleID = 'test.bc'
+; ModuleID = 'test.cpp'
 source_filename = "test.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 %struct.c = type { [4 x i32], [4 x i32], [4 x i32] }
-%struct.cGT = type { i32, i32, i32 }
 
 @obj = dso_local global %struct.c zeroinitializer, align 4
 @.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
-@transposed = external global [4 x %struct.cGT]
 
 ; Function Attrs: mustprogress noinline norecurse uwtable
 define dso_local noundef i32 @main() #0 {
   %1 = alloca i32, align 4
   store i32 0, ptr %1, align 4
   store i32 3, ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 1, i64 2), align 4
-  %2 = getelementptr inbounds %struct.c, ptr @obj, i32 0, i32 1, i64 2
-  %hi = getelementptr inbounds [3 x %struct.cGT], ptr @transposed, i32 0, i64 2, i32 1
-  %3 = load i32, ptr %hi, align 4
-  %4 = load i32, ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 1, i64 2), align 4
-  %5 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %4)
+  %2 = load i32, ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 1, i64 2), align 4
+  %3 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %2)
   ret i32 1
 }
 

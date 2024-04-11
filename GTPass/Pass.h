@@ -48,12 +48,35 @@ public:
         // code below:
         // Assuming you have an existing pointer value named "arrPtr"
         //Value *arrPtr = ...; // get the existing pointer value somehow
-
-        IRBuilder<> builder(L.getContext());
         std::vector<Value*> gepIndices;
-        gepIndices.push_back(builder.getInt64(0));
-        gepIndices.push_back(builder.getInt64(2));
-        gepIndices.push_back(builder.getInt32(1));
+
+        
+        for (auto &Op : L.operands()) {
+            if (auto* expr = dyn_cast<ConstantExpr>(Op)){
+                if (expr->getOpcode() == Instruction::GetElementPtr) {
+                errs ()<<"hi\n";
+                GetElementPtrInst* GEP = dyn_cast<GetElementPtrInst>(expr->getAsInstruction());
+                GEP->insertBefore(&L);
+                errs() << "GEP OPS\n";
+                int count = 0;
+                for (auto &GOp : GEP->operands()) {
+                    errs() << *GOp << "\n";
+                    if (count) {
+                        gepIndices.push_back(GOp);
+                    }
+                    count++;
+                }
+            }
+
+            }
+            else {
+                errs ()<<"h\n";
+            }
+        
+        }
+        std::swap(gepIndices[2], gepIndices[1]);
+        IRBuilder<> builder(L.getContext());
+        
         //GetElementPtrInst *gepInst = builder.CreateGEP(newType, globalVar, gepIndices, "gep");
         //GetElementPtrInst *gepInst = builder.CreateGEP(globalVar->getType(), globalVar, gepIndices, "gep"); 
         PointerType *pointerType = dyn_cast<PointerType>(globalVar->getType());
@@ -69,7 +92,9 @@ public:
         newL->insertBefore(&L);
         gepInst->insertBefore(newL);
         newL->setOperand(0,gepInst);
-        errs() << *newL->getOperand(0)<< "OP \n";
+        errs() << *newL->getOperand(0)<< " OP \n";
+        errs() << *L.getOperand(0) << "\n";
+        
         //errs() << * builder.CreateLoad(L.getType(),(Value*)L.getPointerOperand(),"hi") << "\n";
         //errs() << *newLoadInst << "HELLO \n";
         //newLoadInst->insertBefore(&L);
