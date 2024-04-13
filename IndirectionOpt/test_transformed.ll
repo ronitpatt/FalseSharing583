@@ -1,12 +1,14 @@
-; ModuleID = 'test.c'
+; ModuleID = 'test.ll'
 source_filename = "test.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@word = dso_local global [11 x i8] c"HELLOWORLD\00", align 1
 @stdout = external global ptr, align 8
 @.str = private unnamed_addr constant [4 x i8] c"%c \00", align 1
 @.str.1 = private unnamed_addr constant [3 x i8] c"%d\00", align 1
+@word.odd = global [5 x i8] c"ELWRD"
+@word.even = global [6 x i8] c"HLOOL\00"
+@word.ptr = global [11 x ptr] [ptr @word.even, ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 1), ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 2), ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 3), ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 4), ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 5), ptr @word.odd, ptr getelementptr inbounds ([5 x i8], ptr @word.odd, i32 0, i32 1), ptr getelementptr inbounds ([5 x i8], ptr @word.odd, i32 0, i32 2), ptr getelementptr inbounds ([5 x i8], ptr @word.odd, i32 0, i32 3), ptr getelementptr inbounds ([5 x i8], ptr @word.odd, i32 0, i32 4)]
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
@@ -31,7 +33,7 @@ define dso_local i32 @main() #0 {
   %11 = load ptr, ptr @stdout, align 8
   %12 = load i32, ptr %4, align 4
   %13 = sext i32 %12 to i64
-  %14 = getelementptr inbounds [11 x i8], ptr @word, i64 0, i64 %13
+  %14 = getelementptr inbounds [11 x i8], ptr @word.ptr, i64 0, i64 %13
   %15 = load i8, ptr %14, align 1
   %16 = sext i8 %15 to i32
   %17 = call i32 (ptr, ptr, ...) @fprintf(ptr noundef %11, ptr noundef @.str, i32 noundef %16)

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char word[] = "helloworld";
+char word[] = "HELLOWORLD";
 
 int main()
 {
@@ -14,10 +14,10 @@ int main()
   // strcpy(word_two, "belloworld");    
 
   int i;
-  for (i = 0; i < sizeof(word); i++) {
-    //fprintf(stdout,"%c", word[i]);
+  for (i = 0; i < 15; i++) {
+    fprintf(stdout,"%c ", word[i]);
   }
-  // fprintf(stdout,"%c", '\n');
+  fprintf(stdout,"%d", '\n');
 
   // for (i = 0; i < strlen(word_two); i++) {
   //   fprintf(stdout,"%c", word_two[i]);

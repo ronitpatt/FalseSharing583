@@ -30,10 +30,14 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         Type *IntPtrType = Type::getInt8PtrTy(Context);
         unsigned NumElements = AT->getNumElements();
 
+        // Assuming the first element should be even-indexed
+        unsigned NumOddElements = NumElements / 2;
+        unsigned NumEvenElements = (NumElements + 1) / 2;
+
         // create the new arrays for odd and even elements (new chunks per processor; assuming 2 processors 
         // (even elemnts are one processor, odd belong to the other))
-        ArrayType *OddType = ArrayType::get(IntType, (NumElements + 1) / 2);
-        ArrayType *EvenType = ArrayType::get(IntType, NumElements / 2);
+        ArrayType *OddType = ArrayType::get(IntType, NumOddElements);
+        ArrayType *EvenType = ArrayType::get(IntType, NumEvenElements);
         GlobalVariable *OddGV = new GlobalVariable(M, OddType, GV.isConstant(), GV.getLinkage(), nullptr, GV.getName() + ".odd");
         GlobalVariable *EvenGV = new GlobalVariable(M, EvenType, GV.isConstant(), GV.getLinkage(), nullptr, GV.getName() + ".even");
         
@@ -73,12 +77,9 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         errs() << "Even array loc: " << EvenArrayInit << "\n";
         errs() << "Even array initializer: " << *EvenArrayInit << "\n\n\n";
 
-
         // Code works until this point. Two new chunks of memory are created: EvenGV and OddGV. 
           // EvenGV stores all of the even elements, OddGV stores all of the odd elements. 
 // ------------------------------------------------------------
-
-
         std::vector<Constant*> PtrElements;
 
 //method 1 for getting each elements pointer from the new chunks allocated to each processor (EvenGV, OddGV)
@@ -148,20 +149,25 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
           PtrElements.push_back(GEP);
         }
 
-        // // Odd elements iteration.
-        // for (unsigned i = 0; i < OddElements.size(); ++i) {
-        //   std::vector<Constant*> IdxList = {
-        //     ConstantInt::get(Type::getInt32Ty(Context), 0),
-        //     ConstantInt::get(Type::getInt32Ty(Context), i)
-        //   };
 
-        //   Constant *GEP = ConstantExpr::getGetElementPtr(
-        //     OddType, OddGV, ArrayRef<Constant*>(IdxList), true /* is in bounds */);
+        // Odd elements iteration.
+        for (unsigned i = 0; i < OddElements.size(); ++i) {
+          std::vector<Constant*> IdxList = {
+            ConstantInt::get(Type::getInt32Ty(Context), 0),
+            ConstantInt::get(Type::getInt32Ty(Context), i)
+          };
 
-        //   // For odd elements, we only start adding them after we've added all even
-        //   // elements, hence the index should be offset by the number of even elements.
-        //   PtrElements.push_back(GEP);
-        // }
+          Constant *GEP = ConstantExpr::getGetElementPtr(
+            OddType, OddGV, ArrayRef<Constant*>(IdxList), true /* is in bounds */);
+
+          errs() << "\nIteration: " << i << "\n";
+          errs() << "Element ptr: " << GEP << "\n"; // This should print the GEP expression, not the array itself
+          errs() << "Element: " << *GEP << "\n"; // This should print the GEP expression, not the array itself
+
+          // For odd elements, we only start adding them after we've added all even
+          // elements, hence the index should be offset by the number of even elements.
+          PtrElements.push_back(GEP);
+        }
 
 
 //method 2 for getting each elements pointer from the new chunks allocated to each processor (EvenGV, OddGV)
@@ -199,16 +205,32 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         // }
 
   // temporary; just want to terminate the program early since the above issue causes it to infinetnly loop
-  return PreservedAnalyses::none();
+  // return PreservedAnalyses::none();
 
         // // initialize the array of pointers with PtrElements (where we just put the pointers to even/odd elems)
-        // PtrArrayGV->setInitializer(ConstantArray::get(PtrArrayType, PtrElements));
+        PtrArrayGV->setInitializer(ConstantArray::get(PtrArrayType, PtrElements));
+
+std::vector<Constant*> IdxList;
+// Add index constants to IdxList for the specific element you want to access.
+// For example, to access the first element, add a zero index twice 
+// (the first for the array pointer, second for the first element of the array).
+IdxList.push_back(ConstantInt::get(Type::getInt32Ty(Context), 0));
+IdxList.push_back(ConstantInt::get(Type::getInt32Ty(Context), 0));
+
+// Use getGetElementPtr to create a GEP constant expression pointing to the subelement.
+Constant* GEP = ConstantExpr::getGetElementPtr(PtrArrayType, PtrArrayGV, IdxList);
+
+// Now print out the GEP
+errs() << "\n\nGEP Instruction: " << *GEP << "\n\n\n";
 
         // // replace all uses of the original array with this new array of pointers
-        // GV.replaceAllUsesWith(PtrArrayGV);
+        GV.replaceAllUsesWith(PtrArrayGV);
 
         // // remove the original global variable if it's not needed anymore
-        // GV.eraseFromParent();
+        GV.eraseFromParent();
+                  errs() << "\njup: " <<"\n";
+
+break;
       }
     }
   }
