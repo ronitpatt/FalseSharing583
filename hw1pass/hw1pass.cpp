@@ -30,7 +30,9 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
 
     // size_t cache_line = cache_line_size();
 
-    std::unordered_map<int, std::vector<int>> idx_to_align;
+    // std::unordered_map<int, std::vector<std::pair<int, IRBuilder<>>> idx_to_align;
+    std::map<int, std::vector<std::pair<int, AllocaInst*>>> idx_to_align;
+
 
     unsigned num_arrays = 0;
     
@@ -43,19 +45,27 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
 
     AllocaInst *Alloca_global;
 
+    errs() << "FLAG 1\n ";
+
 
     for (auto &BB : F) {
       for (auto &I : BB) {
         if (auto *Alloca = dyn_cast<AllocaInst>(&I)) {
           num_arrays++;
           // assume num processors 
+          errs() << "FLAG 2\n ";
           
           if (Alloca->getAllocatedType()->isArrayTy()) {
+            
+            errs() << "FLAG 3\n ";
 
             Alloca_global = Alloca;
+            // IRBuilder<> Builder(Alloca_global);
 
 
             // Query cache block size information
+
+            errs() << "FLAG 4\n ";
 
             ElemTy = Alloca->getAllocatedType()->getArrayElementType();
             auto &TTI = FAM.getResult<TargetIRAnalysis>(F);
@@ -70,7 +80,10 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
               unsigned NumCacheBlocks = (ElemSize + ElemAlignment - 1) / ElemAlignment; // helper var for debugging
               
               // auto *NewAlloca = Builder.CreateAlloca(ElemTy);
-              idx_to_align[i].push_back(ElemAlignment);
+              idx_to_align[i].push_back({ElemAlignment, Alloca});
+
+              // idx_to_align[i].push_back(std::make_pair(ElemAlignment, Builder));
+
               // NewAlloca->setAlignment(Align(ElemAlignment));
             }
             
@@ -82,14 +95,17 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
 
     // Alignment : 
 
-    IRBuilder<> Builder(Alloca_global);
+    errs() << "Error Flag\n";
 
-    // for (const auto& pair : idx_to_align) {
-    //     for(int x: pair.second){
-    //       auto *NewAlloca = Builder.CreateAlloca(ElemTy);
-    //       NewAlloca->setAlignment(Align(x));
-    //     }
-    // }
+   
+
+    for (const auto& pair : idx_to_align) {
+        for(auto x: pair.second){ // pair of alignment idx and alloca address
+          IRBuilder<> Builder(x.second);
+          auto *NewAlloca = Builder.CreateAlloca(ElemTy);
+          NewAlloca->setAlignment(Align(x.first));
+        }
+    }
 
 
     // find an array and do some indirection
