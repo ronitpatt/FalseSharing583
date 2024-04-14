@@ -14,11 +14,11 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local noundef i32 @main() #0 {
   %1 = alloca i32, align 4
   store i32 0, ptr %1, align 4
-  store i32 3, ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 1, i64 2), align 4
-  %2 = getelementptr inbounds %struct.c, ptr @obj, i32 0, i32 1, i64 2
-  %hi = getelementptr inbounds [3 x %struct.cGT], ptr @transposed, i32 0, i64 2, i32 1
+  store i32 3, ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 2, i64 2), align 4
+  %2 = getelementptr inbounds %struct.c, ptr @obj, i32 0, i32 2, i64 2
+  %hi = getelementptr inbounds [3 x %struct.cGT], ptr @transposed, i32 0, i64 2, i32 2
   %3 = load i32, ptr %hi, align 4
-  %4 = load i32, ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 1, i64 2), align 4
+  %4 = load i32, ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 2, i64 2), align 4
   %5 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %4)
   ret i32 1
 }

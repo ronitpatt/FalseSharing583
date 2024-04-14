@@ -74,7 +74,8 @@ public:
             }
         
         }
-        std::swap(gepIndices[2], gepIndices[1]);
+        int numIndices = gepIndices.size();
+        std::swap(gepIndices[numIndices - 1], gepIndices[numIndices - 2]);
         IRBuilder<> builder(L.getContext());
         
         //GetElementPtrInst *gepInst = builder.CreateGEP(newType, globalVar, gepIndices, "gep");

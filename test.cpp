@@ -8,7 +8,6 @@ struct c {
 };
 c obj;
 
-
 // struct c_elem {
 //   int a;
 //   int b;
@@ -23,8 +22,16 @@ int main()
   obj.a[3];
   newobj[3].a;
   */
-  obj.b[2] = 3;
-  printf("%d", obj.b[2]);
-  //int a = arr[2].b;
+
+  for(int i = 0; i < 4; ++i) {
+    obj.a[i] = 1;
+  }
+  // for(int i = 0; i < 4; ++i) {
+  //   printf("%d \n", obj.a[i]);
+  //   printf("%d \n", obj.b[i]);
+  //   printf("%d \n", obj.c[i]);
+  // }
+  
+
   return 1;
 }
