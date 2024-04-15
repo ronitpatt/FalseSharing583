@@ -1,4 +1,4 @@
-# Install script for directory: /n/eecs583a/home/aryanj/Fsharing/FsharingPass
+# Install script for directory: /home/aryan/Documents/FalseSharing583/FsharingPass
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -49,7 +49,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xFsharingPassx" OR NOT CMAKE_INSTALL
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/FsharingPass.so"
          RPATH "\$ORIGIN/../lib")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE MODULE FILES "/n/eecs583a/home/aryanj/Fsharing/build/FsharingPass/FsharingPass.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE MODULE FILES "/home/aryan/Documents/FalseSharing583/build/FsharingPass/FsharingPass.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/FsharingPass.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/FsharingPass.so")
     file(RPATH_CHANGE

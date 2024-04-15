@@ -1,45 +1,54 @@
 #include <stdio.h>
 #include <unistd.h>
+// #include <thread>
+// #include <atomic>
+#include <pthread.h>
 
 struct c {
     int front;
+    //char pad[60];
+    int back;
   }; // is it ok to pad this inside struct
+
+int elements_per_thread = 1000000;
+
+void* work (void* obj) {
+  for (int i =0; i<elements_per_thread; i++){
+    //printf("inside thread\n");
+    c* ptr = (c*)obj;
+    ptr->front++;
+    // printf("%d\n", ptr->front);
+  }
+  return nullptr;
+}
+
+void* work2 (void* obj) {
+  for (int i =0; i<elements_per_thread; i++){
+    // printf("inside thread\n");
+    c* ptr = (c*)obj;
+    ptr->back++;
+    // printf("%d\n", ptr->front);
+  }
+  return nullptr;
+}
 
 
 int main()
 {
-  c arr[4];
-
-  for (int i = 0; i<12; i++){
-    arr[i].front = 888;
-  }
-  // c a;
-  // arr[0].front = 0;
+  c obj;
+  obj.front = 0;
+  obj.back = 0;
   
-  bool even = (fork() == 0);
+  // std::jthread t1(work, 1);
+  // std::jthread t2(work1, 2);
+  pthread_t ptid1, ptid2; 
+  pthread_create(&ptid1, NULL, &work, (void*) &obj); 
+  pthread_create(&ptid2, NULL, &work2, (void*) &obj); 
 
-
-  for (int i = 0; i<6; i++){
-    if (even) {
-      printf("%d", arr[i*2].front);
-    } else {
-      printf("%d", arr[i*2+1].front);
-    }
-  }
-
-  // for (int i = 0; i < 4; i+=1) {
-  //   printf("%d %d %d\n", arr[i].front, arr[i].c1, arr[i].array[1]);
-  // }
-  //c* a= &(arr[0]);
-
-  int *buff = (int*)&arr;
-  
-  for (int i = 0; i < 64*4; i+=1) {
-    if (i*4 %64 == 0) {
-      printf("-----------------------\n");
-    }
-    printf("%d %d \n", i, buff[i]);
-  }
-
-  return 1;
+  pthread_join(ptid1, NULL);
+  pthread_join(ptid2, NULL);
+  printf("front: %d\n", obj.front);
+  printf("back: %d\n", obj.back);
+  // pthread_exit(NULL);
+  return 0;
 }
