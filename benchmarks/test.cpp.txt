@@ -1,0 +1,4 @@
+before cache misses were 2.2%
+after cache misses .2%
+
+runtime went from .004 to .02

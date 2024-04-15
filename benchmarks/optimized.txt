@@ -1,0 +1,30 @@
+# started on Mon Apr 15 14:18:19 2024
+
+
+ Performance counter stats for './optimized':
+
+              6.43 msec task-clock                       #    0.945 CPUs utilized             
+                 3      context-switches                 #  466.599 /sec                      
+                 1      cpu-migrations                   #  155.533 /sec                      
+                76      page-faults                      #   11.821 K/sec                     
+         4,523,219      cycles                           #    0.704 GHz                       
+        42,719,365      instructions                     #    9.44  insn per cycle            
+        10,323,564      branches                         #    1.606 G/sec                     
+            13,311      branch-misses                    #    0.13% of all branches           
+        10,430,987      L1-dcache-loads                  #    1.622 G/sec                     
+            30,696      L1-dcache-load-misses            #    0.29% of all L1-dcache accesses 
+     <not counted>      LLC-loads                                                               (0.00%)
+     <not counted>      LLC-load-misses                                                         (0.00%)
+   <not supported>      L1-icache-loads                                                       
+     <not counted>      L1-icache-load-misses                                                   (0.00%)
+     <not counted>      dTLB-loads                                                              (0.00%)
+     <not counted>      dTLB-load-misses                                                        (0.00%)
+     <not counted>      iTLB-loads                                                              (0.00%)
+     <not counted>      iTLB-load-misses                                                        (0.00%)
+
+       0.006801874 seconds time elapsed
+
+       0.006955000 seconds user
+       0.000000000 seconds sys
+
+

@@ -1,0 +1,30 @@
+# started on Mon Apr 15 14:18:18 2024
+
+
+ Performance counter stats for './unoptimized':
+
+             20.30 msec task-clock                       #    0.968 CPUs utilized             
+                 1      context-switches                 #   49.254 /sec                      
+                 0      cpu-migrations                   #    0.000 /sec                      
+                77      page-faults                      #    3.793 K/sec                     
+         3,986,385      cycles                           #    0.196 GHz                       
+        19,567,857      instructions                     #    4.91  insn per cycle            
+         5,969,269      branches                         #  294.012 M/sec                     
+            13,589      branch-misses                    #    0.23% of all branches           
+         9,869,240      L1-dcache-loads                  #  486.102 M/sec                     
+            32,198      L1-dcache-load-misses            #    0.33% of all L1-dcache accesses 
+             1,191      LLC-loads                        #   58.662 K/sec                       (46.17%)
+               705      LLC-load-misses                  #   59.19% of all L1-icache accesses   (26.38%)
+   <not supported>      L1-icache-loads                                                       
+            42,484      L1-icache-load-misses                                                   (6.58%)
+     <not counted>      dTLB-loads                                                              (0.00%)
+     <not counted>      dTLB-load-misses                                                        (0.00%)
+     <not counted>      iTLB-loads                                                              (0.00%)
+     <not counted>      iTLB-load-misses                                                        (0.00%)
+
+       0.020971984 seconds time elapsed
+
+       0.021238000 seconds user
+       0.000000000 seconds sys
+
+
