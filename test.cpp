@@ -10,10 +10,11 @@ c obj;
 
 // struct c_elem {
 //   int a;
+//   int a;
 //   int b;
 //   int c;
 // };
-// c_elem arr[3];
+// c_elem arr[4];
 
 int main()
 {
@@ -22,7 +23,8 @@ int main()
   obj.a[3];
   newobj[3].a;
   */
-
+  //printf("%d\n", obj.a[2]);
+  //printf("%d", obj.a[2]);
   for(int i = 0; i < 4; ++i) {
     obj.a[i] = 1;
   }

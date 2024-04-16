@@ -1,4 +1,4 @@
-# Install script for directory: /n/eecs583a/home/aryanj/GT/GTPass
+# Install script for directory: /home/aryan/Documents/FalseSharing583/GTPass
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -49,7 +49,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xGTPassx" OR NOT CMAKE_INSTALL_COMPO
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/GTPass.so"
          RPATH "\$ORIGIN/../lib")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE MODULE FILES "/n/eecs583a/home/aryanj/GT/build/GTPass/GTPass.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE MODULE FILES "/home/aryan/Documents/FalseSharing583/build/GTPass/GTPass.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/GTPass.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/GTPass.so")
     file(RPATH_CHANGE

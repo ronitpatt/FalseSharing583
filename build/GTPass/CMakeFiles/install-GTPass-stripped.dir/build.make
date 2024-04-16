@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /n/eecs583a/home/aryanj/GT
+CMAKE_SOURCE_DIR = /home/aryan/Documents/FalseSharing583
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /n/eecs583a/home/aryanj/GT/build
+CMAKE_BINARY_DIR = /home/aryan/Documents/FalseSharing583/build
 
 # Utility rule file for install-GTPass-stripped.
 
@@ -67,7 +67,7 @@ include GTPass/CMakeFiles/install-GTPass-stripped.dir/compiler_depend.make
 include GTPass/CMakeFiles/install-GTPass-stripped.dir/progress.make
 
 GTPass/CMakeFiles/install-GTPass-stripped:
-	cd /n/eecs583a/home/aryanj/GT/build/GTPass && /usr/bin/cmake -DCMAKE_INSTALL_COMPONENT="GTPass" -DCMAKE_INSTALL_DO_STRIP=1 -P /n/eecs583a/home/aryanj/GT/build/cmake_install.cmake
+	cd /home/aryan/Documents/FalseSharing583/build/GTPass && /usr/bin/cmake -DCMAKE_INSTALL_COMPONENT="GTPass" -DCMAKE_INSTALL_DO_STRIP=1 -P /home/aryan/Documents/FalseSharing583/build/cmake_install.cmake
 
 install-GTPass-stripped: GTPass/CMakeFiles/install-GTPass-stripped
 install-GTPass-stripped: GTPass/CMakeFiles/install-GTPass-stripped.dir/build.make
@@ -78,10 +78,10 @@ GTPass/CMakeFiles/install-GTPass-stripped.dir/build: install-GTPass-stripped
 .PHONY : GTPass/CMakeFiles/install-GTPass-stripped.dir/build
 
 GTPass/CMakeFiles/install-GTPass-stripped.dir/clean:
-	cd /n/eecs583a/home/aryanj/GT/build/GTPass && $(CMAKE_COMMAND) -P CMakeFiles/install-GTPass-stripped.dir/cmake_clean.cmake
+	cd /home/aryan/Documents/FalseSharing583/build/GTPass && $(CMAKE_COMMAND) -P CMakeFiles/install-GTPass-stripped.dir/cmake_clean.cmake
 .PHONY : GTPass/CMakeFiles/install-GTPass-stripped.dir/clean
 
 GTPass/CMakeFiles/install-GTPass-stripped.dir/depend:
-	cd /n/eecs583a/home/aryanj/GT/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /n/eecs583a/home/aryanj/GT /n/eecs583a/home/aryanj/GT/GTPass /n/eecs583a/home/aryanj/GT/build /n/eecs583a/home/aryanj/GT/build/GTPass /n/eecs583a/home/aryanj/GT/build/GTPass/CMakeFiles/install-GTPass-stripped.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/aryan/Documents/FalseSharing583/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aryan/Documents/FalseSharing583 /home/aryan/Documents/FalseSharing583/GTPass /home/aryan/Documents/FalseSharing583/build /home/aryan/Documents/FalseSharing583/build/GTPass /home/aryan/Documents/FalseSharing583/build/GTPass/CMakeFiles/install-GTPass-stripped.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : GTPass/CMakeFiles/install-GTPass-stripped.dir/depend
 

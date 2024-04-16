@@ -50,7 +50,8 @@ void transposeStruct(StructType* OldStructType, Module& M) {
   
   StructType *newStructType = StructType::create(M.getContext(), FieldTypes, OldStructType->getName().str() + "GT");
   ArrayType* newObjType = ArrayType::get(newStructType, length);
-  GlobalVariable* globalVar = new GlobalVariable(M, newObjType, false, GlobalValue::ExternalLinkage, nullptr, "transposed");
+  GlobalVariable* globalVar = new GlobalVariable(M, newObjType, false, GlobalValue::InternalLinkage, 0 , "transposed");
+  globalVar->setAlignment(Align(16));
   errs() << "REPLACE TYPES CALLED" << "\n";
   replace_types(M, OldStructType, newStructType, globalVar);
 }

@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /n/eecs583a/home/aryanj/GT
+CMAKE_SOURCE_DIR = /home/aryan/Documents/FalseSharing583
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /n/eecs583a/home/aryanj/GT/build
+CMAKE_BINARY_DIR = /home/aryan/Documents/FalseSharing583/build
 
 # Utility rule file for omp_gen.
 
@@ -78,6 +78,6 @@ CMakeFiles/omp_gen.dir/clean:
 .PHONY : CMakeFiles/omp_gen.dir/clean
 
 CMakeFiles/omp_gen.dir/depend:
-	cd /n/eecs583a/home/aryanj/GT/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /n/eecs583a/home/aryanj/GT /n/eecs583a/home/aryanj/GT /n/eecs583a/home/aryanj/GT/build /n/eecs583a/home/aryanj/GT/build /n/eecs583a/home/aryanj/GT/build/CMakeFiles/omp_gen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/aryan/Documents/FalseSharing583/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aryan/Documents/FalseSharing583 /home/aryan/Documents/FalseSharing583 /home/aryan/Documents/FalseSharing583/build /home/aryan/Documents/FalseSharing583/build /home/aryan/Documents/FalseSharing583/build/CMakeFiles/omp_gen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/omp_gen.dir/depend
 
