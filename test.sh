@@ -5,6 +5,6 @@
 # # ./output_prof
 
 cd build && make && cd ..
-opt -load-pass-plugin=./build/FsharingPass/FsharingPass.so -passes="" temp.ll -f > test.bc
+opt  -passes="" test.ll.out -f > test.bc
 llvm-dis test.bc -o save.ll
 clang -fprofile-instr-generate test.bc -o run_this_code -std=c++11 -stdlib=libc++

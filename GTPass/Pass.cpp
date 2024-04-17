@@ -18,12 +18,12 @@ size_t cache_line_size() {
 
 
 
-void replaceUsesInFunction(Function* func, StructType* oldType, StructType* newType, GlobalVariable* gv) {
-    ReplaceTypeVisitor visitor{oldType, newType, gv};
+void replaceUsesInFunction(Function* func, StructType* oldType, StructType* newType, GlobalVariable* gv, GlobalVariable* old) {
+    ReplaceTypeVisitor visitor{oldType, newType, gv, old};
     visitor.visit(func);
 }
 
-void replace_types(Module &M, StructType *oldStructType, StructType *newStructType, GlobalVariable* gv) {
+void replace_types(Module &M, StructType *oldStructType, StructType *newStructType, GlobalVariable* gv, GlobalVariable *old) {
     // for (GlobalVariable &GV : M.globals()) {
     //     if (GV.getType() == oldStructType) {
         
@@ -32,7 +32,7 @@ void replace_types(Module &M, StructType *oldStructType, StructType *newStructTy
 
     for (auto &F : M) {
       errs() << F.getName() << "\n";
-      replaceUsesInFunction(&F, oldStructType, newStructType, gv);
+      replaceUsesInFunction(&F, oldStructType, newStructType, gv, old);
     }
 
 }
@@ -40,6 +40,12 @@ void replace_types(Module &M, StructType *oldStructType, StructType *newStructTy
 void transposeStruct(StructType* OldStructType, Module& M) {
   std::vector<Type *> FieldTypes;
   // errs() << "PADDING STRUCT" << OldStructType->getName() << "\n";
+  GlobalVariable* gv;
+  for (llvm::GlobalVariable &globalVar : M.globals()) {
+    gv = &globalVar;
+    break;
+  }
+
   int length = 0;
   for (unsigned i = 0; i < OldStructType->getNumElements(); ++i) {
     if (ArrayType* arrtype = dyn_cast<ArrayType>(OldStructType->getElementType(i))) {
@@ -50,10 +56,13 @@ void transposeStruct(StructType* OldStructType, Module& M) {
   
   StructType *newStructType = StructType::create(M.getContext(), FieldTypes, OldStructType->getName().str() + "GT");
   ArrayType* newObjType = ArrayType::get(newStructType, length);
-  GlobalVariable* globalVar = new GlobalVariable(M, newObjType, false, GlobalValue::InternalLinkage, 0 , "transposed");
+  llvm::ConstantAggregateZero *zeroInit = llvm::ConstantAggregateZero::get(newObjType);
+  GlobalVariable* globalVar = new GlobalVariable(M, newObjType, false, GlobalValue::InternalLinkage, zeroInit , "transposed");
   globalVar->setAlignment(Align(16));
-  errs() << "REPLACE TYPES CALLED" << "\n";
-  replace_types(M, OldStructType, newStructType, globalVar);
+  //globalVar->setExternallyInitialized(false);
+  errs() << "REPLACE TYPES CALLED " << globalVar->isExternallyInitialized()<< "\n";
+  gv->replaceAllUsesWith(globalVar);
+  replace_types(M, OldStructType, newStructType, globalVar, gv);
 }
 
 namespace {

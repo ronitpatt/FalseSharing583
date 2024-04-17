@@ -1,23 +1,71 @@
-; ModuleID = 'test.cpp'
+; ModuleID = 'test.bc'
 source_filename = "test.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.c_elem = type { i32, i32, i32 }
+%struct.c = type { [4 x i32], [4 x i32], [4 x i32] }
+%struct.cGT = type { i32, i32, i32 }
 
-@arr = dso_local global [3 x %struct.c_elem] zeroinitializer, align 16
+@obj = dso_local global %struct.c zeroinitializer, align 4
+@.str = private unnamed_addr constant [10 x i8] c"%p %p %p\0A\00", align 1
+@.str.1 = private unnamed_addr constant [11 x i8] c"%d %d %d \0A\00", align 1
+@transposed = internal global [4 x %struct.cGT] zeroinitializer, align 16
 
-; Function Attrs: mustprogress noinline norecurse nounwind uwtable
+; Function Attrs: mustprogress noinline norecurse uwtable
 define dso_local noundef i32 @main() #0 {
   %1 = alloca i32, align 4
-  %2 = alloca i32, align 4
+  %2 = alloca ptr, align 8
+  %3 = alloca i32, align 4
   store i32 0, ptr %1, align 4
-  %3 = load i32, ptr getelementptr inbounds ([3 x %struct.c_elem], ptr @arr, i64 0, i64 2, i32 1), align 4
-  store i32 %3, ptr %2, align 4
+  store i32 1, ptr @transposed, align 4
+  %hi = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i64 0, i64 1
+  store i32 2, ptr %hi, align 4
+  %hi1 = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i64 0, i64 2
+  store i32 3, ptr %hi1, align 4
+  %hi2 = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i64 0, i64 3
+  store i32 4, ptr %hi2, align 4
+  %hi3 = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i32 1, i32 0
+  store i32 5, ptr %hi3, align 4
+  %4 = call i32 (ptr, ...) @printf(ptr noundef @.str, ptr noundef @transposed, ptr noundef getelementptr inbounds ([4 x i32], ptr @transposed, i64 0, i64 1), ptr noundef getelementptr inbounds (%struct.c, ptr @transposed, i32 0, i32 2))
+  store ptr @transposed, ptr %2, align 8
+  store i32 0, ptr %3, align 4
+  br label %5
+
+5:                                                ; preds = %21, %0
+  %6 = load i32, ptr %3, align 4
+  %7 = icmp slt i32 %6, 4
+  br i1 %7, label %8, label %24
+
+8:                                                ; preds = %5
+  %9 = load ptr, ptr %2, align 8
+  %10 = getelementptr inbounds i32, ptr %9, i64 0
+  %11 = load i32, ptr %10, align 4
+  %12 = load ptr, ptr %2, align 8
+  %13 = getelementptr inbounds i32, ptr %12, i64 1
+  %14 = load i32, ptr %13, align 4
+  %15 = load ptr, ptr %2, align 8
+  %16 = getelementptr inbounds i32, ptr %15, i64 2
+  %17 = load i32, ptr %16, align 4
+  %18 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %11, i32 noundef %14, i32 noundef %17)
+  %19 = load ptr, ptr %2, align 8
+  %20 = getelementptr inbounds i32, ptr %19, i64 3
+  store ptr %20, ptr %2, align 8
+  br label %21
+
+21:                                               ; preds = %8
+  %22 = load i32, ptr %3, align 4
+  %23 = add nsw i32 %22, 1
+  store i32 %23, ptr %3, align 4
+  br label %5, !llvm.loop !6
+
+24:                                               ; preds = %5
   ret i32 1
 }
 
-attributes #0 = { mustprogress noinline norecurse nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+declare i32 @printf(ptr noundef, ...) #1
+
+attributes #0 = { mustprogress noinline norecurse uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -28,3 +76,5 @@ attributes #0 = { mustprogress noinline norecurse nounwind uwtable "frame-pointe
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 17.0.6"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}
