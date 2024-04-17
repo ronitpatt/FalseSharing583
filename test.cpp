@@ -38,7 +38,8 @@ int main()
   c obj;
   obj.front = 0;
   obj.back = 0;
-  
+  printf("%p\n",&obj.front );
+  printf("%p\n",&obj.back );
   // std::jthread t1(work, 1);
   // std::jthread t2(work1, 2);
   pthread_t ptid1, ptid2; 

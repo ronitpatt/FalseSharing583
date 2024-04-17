@@ -14,9 +14,10 @@ int main() {
     const int num_threads = 4;
 
     // Atomic integers to increment
+    
     std::array<std::atomic<int>, 4> counters = {0, 0, 0, 0};
     std::atomic<int> final_sum = 0;
-
+    printf("%p\n",&counters);
     // Number of elements to process per thread
     const int elements_per_thread = num_iterations / num_threads;
 
@@ -36,3 +37,6 @@ int main() {
 
     return 0;
 }
+
+//0x7fffb186cb30
+0x7fff7ad01640

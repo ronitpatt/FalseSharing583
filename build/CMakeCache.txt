@@ -272,6 +272,9 @@ LLVM_DIR:PATH=/usr/local/lib/cmake/llvm
 //Statically link FsharingPass into tools (if available)
 LLVM_FSHARINGPASS_LINK_INTO_TOOLS:BOOL=OFF
 
+//Statically link RPass into tools (if available)
+LLVM_RPASS_LINK_INTO_TOOLS:BOOL=OFF
+
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
 
@@ -427,7 +430,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=2
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

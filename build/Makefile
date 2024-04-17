@@ -87,7 +87,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"RPass\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -252,6 +252,45 @@ install-FsharingPass-stripped/fast:
 	$(MAKE) $(MAKESILENT) -f FsharingPass/CMakeFiles/install-FsharingPass-stripped.dir/build.make FsharingPass/CMakeFiles/install-FsharingPass-stripped.dir/build
 .PHONY : install-FsharingPass-stripped/fast
 
+#=============================================================================
+# Target rules for targets named RPass
+
+# Build rule for target.
+RPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 RPass
+.PHONY : RPass
+
+# fast build rule for target.
+RPass/fast:
+	$(MAKE) $(MAKESILENT) -f RPass/CMakeFiles/RPass.dir/build.make RPass/CMakeFiles/RPass.dir/build
+.PHONY : RPass/fast
+
+#=============================================================================
+# Target rules for targets named install-RPass
+
+# Build rule for target.
+install-RPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-RPass
+.PHONY : install-RPass
+
+# fast build rule for target.
+install-RPass/fast:
+	$(MAKE) $(MAKESILENT) -f RPass/CMakeFiles/install-RPass.dir/build.make RPass/CMakeFiles/install-RPass.dir/build
+.PHONY : install-RPass/fast
+
+#=============================================================================
+# Target rules for targets named install-RPass-stripped
+
+# Build rule for target.
+install-RPass-stripped: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-RPass-stripped
+.PHONY : install-RPass-stripped
+
+# fast build rule for target.
+install-RPass-stripped/fast:
+	$(MAKE) $(MAKESILENT) -f RPass/CMakeFiles/install-RPass-stripped.dir/build.make RPass/CMakeFiles/install-RPass-stripped.dir/build
+.PHONY : install-RPass-stripped/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -268,9 +307,12 @@ help:
 	@echo "... acc_gen"
 	@echo "... install-FsharingPass"
 	@echo "... install-FsharingPass-stripped"
+	@echo "... install-RPass"
+	@echo "... install-RPass-stripped"
 	@echo "... intrinsics_gen"
 	@echo "... omp_gen"
 	@echo "... FsharingPass"
+	@echo "... RPass"
 .PHONY : help
 
 
