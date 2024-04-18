@@ -32,6 +32,12 @@ void* work2 (void* obj) {
   return nullptr;
 }
 
+/*
+- parallel prefix sum
+- parallel merge sort
+- parallel quick sort
+- parallel matrix multiplication
+*/
 
 int main()
 {
