@@ -1,7 +1,16 @@
 #include "llvm/IR/PassManager.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/Constants.h"
+#include "llvm/IR/GlobalVariable.h"
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/InstrTypes.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/DerivedTypes.h" // For PointerType
+#include "llvm/Support/Casting.h" // For cast<>
+#include "llvm/ADT/SmallVector.h"
 
 #include  <iostream>
 
@@ -17,7 +26,6 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
 
   // TODO: right now, just looping over the global arrays. I have the other if-conditions to check for heap allocated arrays, 
   // but I'll add that in once Indirection  works for global arrays 
-
   for (GlobalVariable &GV : M.globals()) {
     if (GV.hasInitializer()) {
       Constant *Init = GV.getInitializer();
@@ -52,7 +60,6 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         // find all of the actual even and odd data pieces
         for (unsigned i = 0; i < NumElements; ++i) {
           Constant *ElementValue = dyn_cast<Constant>(Init->getAggregateElement(i));
-          errs() << "Element Pos: " << i << ", Loc: " << ElementValue << ", Val: " << *ElementValue << "\n";
           if (i % 2 == 0) {
             EvenElements.push_back(ElementValue);
           } else {
@@ -70,175 +77,93 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         OddGV->setInitializer(OddArrayInit);
         EvenGV->setInitializer(EvenArrayInit);
 
-        // Print the initializers to verify their correctness
-        errs() << "\n\nOdd array loc: " << OddArrayInit << "\n";
-        errs() << "Odd array initializer: " << *OddArrayInit << "\n";
-
-        errs() << "Even array loc: " << EvenArrayInit << "\n";
-        errs() << "Even array initializer: " << *EvenArrayInit << "\n\n\n";
-
-        // Code works until this point. Two new chunks of memory are created: EvenGV and OddGV. 
-          // EvenGV stores all of the even elements, OddGV stores all of the odd elements. 
-// ------------------------------------------------------------
+        // getting each elements pointer from the new chunks allocated to each processor (EvenGV, OddGV)
+        // we'll put these pointers to elements in PtrElements
         std::vector<Constant*> PtrElements;
 
-//method 1 for getting each elements pointer from the new chunks allocated to each processor (EvenGV, OddGV)
-//we'll put these pointers to elements in PtrElements. 
+        Type *ElemType = Type::getInt8Ty(Context); // The element type of the arrays
+        for (unsigned i = 0; i < NumElements; ++i) {
+          Constant *ElementPtr;
 
-/*
-  Example:
-  word[] = h e l l o w o r l d      (from test.c)
-          0 1 2 3 4 5 6 7 8 9      (index)
+          std::vector<Constant*> Indices;
+          Indices.push_back(ConstantInt::get(Type::getInt32Ty(Context), 0)); // Index within the array
+          Indices.push_back(ConstantInt::get(Type::getInt32Ty(Context), i / 2)); // Either Even or Odd index
 
-  Each element of PtrElements should point individually to elements from OddGV and EvenGV 
-  which contain the contents of the array "word", split up by processor.
+          if (i % 2 == 0) { // Even element
+            ElementPtr = ConstantExpr::getGetElementPtr(EvenType, EvenGV, Indices, true /* is in bounds */);
+          } else { // Odd element
+            ElementPtr = ConstantExpr::getGetElementPtr(OddType, OddGV, Indices, true /* is in bounds */);
+          }
 
-  PtrElements: [ &EvenGV[0], &OddGV[0], &EvenGV[1], &OddGV[1], ... ]
-*/
+          PtrElements.push_back(ElementPtr);
 
-        // Even elements iteration. (this is where my problems lie rn. focusing on just getting the EvenGV ptrs for each element)
-        for (unsigned i = 0; i < EvenElements.size(); ++i) {
-          std::vector<Constant*> IdxList = {
-            ConstantInt::get(Type::getInt32Ty(Context), 0),
-            ConstantInt::get(Type::getInt32Ty(Context), i)
-          };
-          
-          Constant *GEP = ConstantExpr::getGetElementPtr(
-            EvenType, EvenGV, ArrayRef<Constant*>(IdxList), false /* is in bounds */);
-          
-          errs() << "\nIteration: " << i << "\n";
-          errs() << "Element ptr: " << GEP << "\n"; // This should print the GEP expression, not the array itself
-          errs() << "Element: " << *GEP << "\n"; // This should print the GEP expression, not the array itself
-          
-          /* 
-            context:
-              This is what OddGV and EvenGV are up until this point; they're right "H e l l o w o r l d \0")
-              OddGV: [5 x i8] c"elwrd"     
-              EvenGV: [6 x i8] c"hlool\00"
-
-            these lines should just print something like:
-              (first param is the type, a 6 element array of bytes; second param is array itself; 
-              third param is starting index, fourth param is offset) ----> 
-              so these lines should grab the ptrs for the 0th,1st, etc. elements of word.even (this is EvenGV)
-
-              ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 0)
-              ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 1)
-              ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 2)
-              ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 4)
-              ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 5)
-              ptr getelementptr inbounds ([6 x i8], ptr @word.even, i32 0, i32 6)
-
-            instead..
-            I get:
-
-              @word.even = global [5 x i8] c"hlool\00"
-              ptr getelementptr inbounds ([5 x i8], ptr @word.even, i32 0, i32 1)
-              ptr getelementptr inbounds ([5 x i8], ptr @word.even, i32 0, i32 2)
-              ptr getelementptr inbounds ([5 x i8], ptr @word.even, i32 0, i32 3)
-              ptr getelementptr inbounds ([5 x i8], ptr @word.even, i32 0, i32 4)
-              ptr getelementptr inbounds ([5 x i8], ptr @word.even, i64 1, i32 0)
-
-            1. the first line is printing the whole even array for some reason. it's also 5xi8 isntead of 6xi8
-            2. the last line has the wrong offset (I think it's overflowing because of the first issue).
-
-            So basically, I'm not sure why getGetElementPtr isn't working when I want the pointer of the 0th element
-              as right now it's printing the whole array.
-
-          */
-
-          PtrElements.push_back(GEP);
+          // Print the element address expression
+          errs() << "Iteration: " << i << "\n";
+          errs() << "Element ptr: " << *ElementPtr << "\n"; // This should print the GEP expression, not the array itself
         }
 
 
-        // Odd elements iteration.
-        for (unsigned i = 0; i < OddElements.size(); ++i) {
-          std::vector<Constant*> IdxList = {
-            ConstantInt::get(Type::getInt32Ty(Context), 0),
-            ConstantInt::get(Type::getInt32Ty(Context), i)
-          };
-
-          Constant *GEP = ConstantExpr::getGetElementPtr(
-            OddType, OddGV, ArrayRef<Constant*>(IdxList), true /* is in bounds */);
-
-          errs() << "\nIteration: " << i << "\n";
-          errs() << "Element ptr: " << GEP << "\n"; // This should print the GEP expression, not the array itself
-          errs() << "Element: " << *GEP << "\n"; // This should print the GEP expression, not the array itself
-
-          // For odd elements, we only start adding them after we've added all even
-          // elements, hence the index should be offset by the number of even elements.
-          PtrElements.push_back(GEP);
-        }
-
-
-//method 2 for getting each elements pointer from the new chunks allocated to each processor (EvenGV, OddGV)
-//we'll put these pointers to elements in PtrElements
-
-        // Type *ElemType = Type::getInt8Ty(Context); // The element type of the arrays
-        // for (unsigned i = 0; i < NumElements; ++i) {
-        //   Constant *ElementPtr;
-
-        //   std::vector<Constant*> Indices;
-        //   Indices.push_back(ConstantInt::get(Type::getInt32Ty(Context), 0)); // Index within the array
-        //   Indices.push_back(ConstantInt::get(Type::getInt32Ty(Context), i / 2)); // Either Even or Odd index
-
-        //   if (i % 2 == 0) { // Even element
-        //     ElementPtr = ConstantExpr::getGetElementPtr(
-        //       EvenType->getElementType(), 
-        //       EvenGV, 
-        //       Indices,
-        //       true /* is in bounds */
-        //     );
-        //   } else { // Odd element
-        //     ElementPtr = ConstantExpr::getGetElementPtr(
-        //       OddType->getElementType(), 
-        //       OddGV, 
-        //       Indices,
-        //       true /* is in bounds */
-        //     );
-        //   }
-
-        //   PtrElements.push_back(ElementPtr);
-
-        //   // Print the element address expression
-        //   errs() << "Iteration: " << i << "\n";
-        //   errs() << "Element ptr: " << *ElementPtr << "\n"; // This should print the GEP expression, not the array itself
-        // }
-
-  // temporary; just want to terminate the program early since the above issue causes it to infinetnly loop
-  // return PreservedAnalyses::none();
-
-        // // initialize the array of pointers with PtrElements (where we just put the pointers to even/odd elems)
+        // initialize the array of pointers with PtrElements (where we just put the pointers to even/odd elems)
         PtrArrayGV->setInitializer(ConstantArray::get(PtrArrayType, PtrElements));
+        
+        SmallVector<User*, 8> Users(GV.user_begin(), GV.user_end());
 
-std::vector<Constant*> IdxList;
-// Add index constants to IdxList for the specific element you want to access.
-// For example, to access the first element, add a zero index twice 
-// (the first for the array pointer, second for the first element of the array).
-IdxList.push_back(ConstantInt::get(Type::getInt32Ty(Context), 0));
-IdxList.push_back(ConstantInt::get(Type::getInt32Ty(Context), 0));
+        for (User* user : Users) {
+          if (auto* inst = dyn_cast<Instruction>(user)) {
+            errs() << "user instruction of: " << *inst  << " user is " << *user << "\n";
 
-// Use getGetElementPtr to create a GEP constant expression pointing to the subelement.
-Constant* GEP = ConstantExpr::getGetElementPtr(PtrArrayType, PtrArrayGV, IdxList);
+            IRBuilder<> Builder(inst);
 
-// Now print out the GEP
-errs() << "\n\nGEP Instruction: " << *GEP << "\n\n\n";
+            Type* IntPtrType = Builder.getInt8PtrTy(); // Get the LLVM type for 'i8*'.
 
-        // // replace all uses of the original array with this new array of pointers
-        GV.replaceAllUsesWith(PtrArrayGV);
+            Builder.SetInsertPoint(inst);
 
-        // // remove the original global variable if it's not needed anymore
+            // Assuming the operand is used within a GEP instruction
+            if (auto* GEP = dyn_cast<GetElementPtrInst>(inst)) {
+              errs() << "found instruction with usage of old array: " << *GEP << "\n";
+
+              Value* index = GEP->getOperand(2);
+
+              std::vector<Value*> IndexVec = {Builder.getInt64(0), index}; // Where index is the LLVM value for your actual index.
+
+              // Create a GEP to access the pointer in the new array of pointers
+              Value* ptrGEP = Builder.CreateInBoundsGEP(PtrArrayType, PtrArrayGV, IndexVec, "");
+
+              // Load the pointer to i8 (char*)
+              LoadInst* loadedPointer = Builder.CreateLoad(Builder.getInt8PtrTy(), ptrGEP, "");
+
+              // Load the actual i8 value from the loaded pointer
+              // LoadInst* loadedValue = Builder.CreateLoad(Builder.getInt8Ty(), loadedPointer, "");
+
+              // Replace the old GEP's usage with the loaded i8 value
+              GEP->replaceAllUsesWith(loadedPointer);
+
+              // Remove the old GEP from the parent basic block
+              GEP->eraseFromParent();
+            }
+          }
+        }
+    
+        errs() << "flag:\n";
+
+        // Now remove the original global variable
         GV.eraseFromParent();
-                  errs() << "\njup: " <<"\n";
-
-break;
       }
+
     }
+
+    //temp:
+    break;
   }
+
+errs() << "Module state before potential crash: \n";
+M.print(llvm::errs(), nullptr);
 
   // Since we are altering the IR in place, we need to return `PreservedAnalyses::none()`.
   return PreservedAnalyses::none();
 }
 };
+
 }
 
 extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginInfo() {
