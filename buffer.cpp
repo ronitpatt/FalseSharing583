@@ -8,19 +8,20 @@
 
 // single producer single consumer
 // atomics
-int numIterations = 500000;
+int numIterations = 5000000;
 class simplebuf
-{
-private:
-    int buf[8];
-    char pad[56];
-    int head {0};
-    char pad1[60];
-    std::atomic<int> size {0};
-    char pad2[60];
-    int tail {0};
-
+{    
 public:
+    int buf[8];
+    // char pad[32];
+    int head {0};
+    // char pad1[60];
+    int tail {0};
+    // char pad2[60];
+    std::atomic<int> size {0};
+    // char pad3[60];
+
+
     bool add(int val) {
         if (size == 8) {
             return false;
@@ -43,13 +44,12 @@ public:
 
 };
 
-
-
 void* producer(void* b) {
     simplebuf* buffer = (simplebuf*)b;
     for (int i = 0; i < numIterations; ++i) {
         while (!buffer->add(i));
     }
+    return nullptr;
 }
 
 void* consumer(void* b) {
@@ -66,6 +66,7 @@ void* consumer(void* b) {
         }
 
     }
+    return nullptr;
 }
 
 int main () {
@@ -73,7 +74,9 @@ int main () {
 
     // Creating the thread
     simplebuf buffer;
-    
+    printf("%p\n", &buffer.head);
+    printf("%p\n", &buffer.tail);
+    printf("%p\n", &buffer.size);
     pthread_t ptid1, ptid2; 
     pthread_create(&ptid1, NULL, &producer, (void*) &buffer); 
     pthread_create(&ptid2, NULL, &consumer, (void*) &buffer); 
@@ -82,3 +85,6 @@ int main () {
     pthread_join(ptid2, NULL);
 
 }
+// 0x7fff8b7783f0
+// 0x7fff8b778430
+// 0x7fff8b778470
