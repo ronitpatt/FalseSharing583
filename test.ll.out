@@ -7,15 +7,19 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.cGT = type { i32, i32, i32 }
 
 @obj = dso_local global %struct.c zeroinitializer, align 4
-@.str = private unnamed_addr constant [10 x i8] c"%p %p %p\0A\00", align 1
+@.str = private unnamed_addr constant [13 x i8] c"%d %d %d %d\0A\00", align 1
 @.str.1 = private unnamed_addr constant [11 x i8] c"%d %d %d \0A\00", align 1
 @transposed = internal global [4 x %struct.cGT] zeroinitializer, align 16
 
 ; Function Attrs: mustprogress noinline norecurse uwtable
 define dso_local noundef i32 @main() #0 {
   %1 = alloca i32, align 4
-  %2 = alloca ptr, align 8
+  %2 = alloca i32, align 4
   %3 = alloca i32, align 4
+  %4 = alloca i32, align 4
+  %5 = alloca i32, align 4
+  %6 = alloca ptr, align 8
+  %7 = alloca i32, align 4
   store i32 0, ptr %1, align 4
   store i32 1, ptr @transposed, align 4
   %hi = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i64 0, i64 1
@@ -40,39 +44,55 @@ define dso_local noundef i32 @main() #0 {
   store i32 7, ptr %hi9, align 4
   %hi10 = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i32 0, i64 3, i32 2
   store i32 8, ptr %hi10, align 4
-  %4 = call i32 (ptr, ...) @printf(ptr noundef @.str, ptr noundef @transposed, ptr noundef getelementptr inbounds ([4 x i32], ptr @transposed, i64 0, i64 1), ptr noundef getelementptr inbounds (%struct.c, ptr @transposed, i32 0, i32 2))
-  store ptr @transposed, ptr %2, align 8
-  store i32 0, ptr %3, align 4
-  br label %5
+  %hi11 = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i64 0, i64 1
+  %8 = load i32, ptr %hi11, align 4
+  store i32 %8, ptr %2, align 4
+  %hi12 = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i64 0, i64 2
+  %9 = load i32, ptr %hi12, align 4
+  store i32 %9, ptr %3, align 4
+  %hi13 = getelementptr inbounds [4 x %struct.cGT], ptr @transposed, i64 0, i64 3
+  %10 = load i32, ptr %hi13, align 4
+  store i32 %10, ptr %4, align 4
+  %hi14 = getelementptr inbounds %struct.cGT, ptr @transposed, i32 0, i32 1
+  %11 = load i32, ptr %hi14, align 4
+  store i32 %11, ptr %5, align 4
+  %12 = load i32, ptr %2, align 4
+  %13 = load i32, ptr %3, align 4
+  %14 = load i32, ptr %4, align 4
+  %15 = load i32, ptr %5, align 4
+  %16 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %12, i32 noundef %13, i32 noundef %14, i32 noundef %15)
+  store ptr @transposed, ptr %6, align 8
+  store i32 0, ptr %7, align 4
+  br label %17
 
-5:                                                ; preds = %21, %0
-  %6 = load i32, ptr %3, align 4
-  %7 = icmp slt i32 %6, 4
-  br i1 %7, label %8, label %24
+17:                                               ; preds = %33, %0
+  %18 = load i32, ptr %7, align 4
+  %19 = icmp slt i32 %18, 4
+  br i1 %19, label %20, label %36
 
-8:                                                ; preds = %5
-  %9 = load ptr, ptr %2, align 8
-  %10 = getelementptr inbounds i32, ptr %9, i64 0
-  %11 = load i32, ptr %10, align 4
-  %12 = load ptr, ptr %2, align 8
-  %13 = getelementptr inbounds i32, ptr %12, i64 1
-  %14 = load i32, ptr %13, align 4
-  %15 = load ptr, ptr %2, align 8
-  %16 = getelementptr inbounds i32, ptr %15, i64 2
-  %17 = load i32, ptr %16, align 4
-  %18 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %11, i32 noundef %14, i32 noundef %17)
-  %19 = load ptr, ptr %2, align 8
-  %20 = getelementptr inbounds i32, ptr %19, i64 3
-  store ptr %20, ptr %2, align 8
-  br label %21
+20:                                               ; preds = %17
+  %21 = load ptr, ptr %6, align 8
+  %22 = getelementptr inbounds i32, ptr %21, i64 0
+  %23 = load i32, ptr %22, align 4
+  %24 = load ptr, ptr %6, align 8
+  %25 = getelementptr inbounds i32, ptr %24, i64 1
+  %26 = load i32, ptr %25, align 4
+  %27 = load ptr, ptr %6, align 8
+  %28 = getelementptr inbounds i32, ptr %27, i64 2
+  %29 = load i32, ptr %28, align 4
+  %30 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %23, i32 noundef %26, i32 noundef %29)
+  %31 = load ptr, ptr %6, align 8
+  %32 = getelementptr inbounds i32, ptr %31, i64 3
+  store ptr %32, ptr %6, align 8
+  br label %33
 
-21:                                               ; preds = %8
-  %22 = load i32, ptr %3, align 4
-  %23 = add nsw i32 %22, 1
-  store i32 %23, ptr %3, align 4
-  br label %5, !llvm.loop !6
+33:                                               ; preds = %20
+  %34 = load i32, ptr %7, align 4
+  %35 = add nsw i32 %34, 1
+  store i32 %35, ptr %7, align 4
+  br label %17, !llvm.loop !6
 
-24:                                               ; preds = %5
+36:                                               ; preds = %17
   ret i32 1
 }
 

@@ -31,7 +31,7 @@ void replace_types(Module &M, StructType *oldStructType, StructType *newStructTy
     // }
 
     for (auto &F : M) {
-      errs() << F.getName() << "\n";
+      errs() << "Visiting " << F.getName() << "\n";
       replaceUsesInFunction(&F, oldStructType, newStructType, gv, old);
     }
 

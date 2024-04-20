@@ -17,66 +17,17 @@ namespace llvm {
             StructType* newType;
             Value* globalVar;
             Value* oldGlobal;
+            ArrayType* arrtype;
             
 
         public:
-            ReplaceTypeVisitor(StructType* Old, StructType* New, GlobalVariable* gv, GlobalVariable* old) : oldType(Old), newType(New), globalVar(gv), oldGlobal(old) {}
+            ReplaceTypeVisitor(StructType* Old, StructType* New, GlobalVariable* gv, GlobalVariable* old) : oldType(Old), newType(New), globalVar(gv), oldGlobal(old) {
+                arrtype = ArrayType::get(newType, 4);
+            }
 
             void visitInstruction(Instruction &I) {}
             
-            void visitLoadInst(LoadInst &L) {
-                errs() << "LOAD " << L << "\n";
-                Value* v = dyn_cast<LoadInst>(&L)->getPointerOperand();
-                std::vector<Value*> gepIndices;
-                bool foundGEP = false;
-                for (auto &Op : L.operands()) {
-                    if (auto* expr = dyn_cast<ConstantExpr>(Op)) {
-                        if (expr->getOpcode() == Instruction::GetElementPtr) {
-                            GetElementPtrInst* GEP = dyn_cast<GetElementPtrInst>(expr->getAsInstruction());
-                            if (oldType != GEP->getSourceElementType()) {
-                                return;
-                            }
-                            GEP->insertBefore(&L);
-                            int count = 0;
-                            for (auto &GOp : GEP->operands()) {
-                                if (count) {
-                                    gepIndices.push_back(GOp);
-                                }
-                                count++;
-                            }
-                            foundGEP = true;
-                            GEP->eraseFromParent();
-                        }
-                    } else {
-                    }
-                
-                }
-                if (!foundGEP ) {
-                    return;
-                }
-
-                int numIndices = gepIndices.size();
-                std::swap(gepIndices[numIndices - 1], gepIndices[numIndices - 2]);
-
-                IRBuilder<> builder(L.getContext());
-                // PointerType *pointerType = dyn_cast<PointerType>(globalVar->getType());
-                // errs() << *pointerType << "\n";
-                ArrayType* gVtype = ArrayType::get(newType, 3);
-                llvm::GetElementPtrInst* gepInst = llvm::GetElementPtrInst::CreateInBounds(
-                    gVtype, globalVar, gepIndices, "hi");
-                Type *loadType = L.getType();
-                LoadInst* newL = (LoadInst*)L.clone();
-                
-                newL->insertBefore(&L);
-                gepInst->insertBefore(newL);
-                newL->setOperand(0,gepInst);
-                
-                errs() << *newL->getOperand(0)<< " OP \n";
-                errs() << *L.getOperand(0) << "\n";
-            }
-
-
-            GetElementPtrInst* handleGEP(GetElementPtrInst &GEP){
+            GetElementPtrInst* handleGEP(GetElementPtrInst &GEP, Type* newType, Instruction& original) {
                 std::vector<Value*> gepIndices;
                 int count = 0;
                 for (auto &GOp : GEP.operands()) {
@@ -85,14 +36,62 @@ namespace llvm {
                     }
                     count++;
                 }
-
                 int numIndices = gepIndices.size();
-                std::swap(gepIndices[numIndices - 1], gepIndices[numIndices - 2]);
+                if (numIndices == 3) {
+                    std::swap(gepIndices[numIndices - 1], gepIndices[numIndices - 2]);
+                }
+                Type* GEPSourceType = arrtype;
+                if ( numIndices == 2 && gepIndices[0]->getType()->getIntegerBitWidth() == 32 && gepIndices[1]->getType()->getIntegerBitWidth() == 32) {
+                    GEPSourceType = newType;
+                }
 
-                ArrayType* gVtype = ArrayType::get(newType, 4);
                 llvm::GetElementPtrInst* gepInst = llvm::GetElementPtrInst::CreateInBounds(
-                    gVtype, globalVar, gepIndices, "hi");
+                    GEPSourceType, globalVar, gepIndices, "hi");
+                //gepInst->insertBefore(&original);
                 return gepInst;
+            }
+
+            void visitLoadInst(LoadInst &L) {
+                
+                Value* v = dyn_cast<LoadInst>(&L)->getPointerOperand();
+                std::vector<Value*> gepIndices;
+                bool foundGEP = false;
+                GetElementPtrInst* GEP;
+                llvm::GetElementPtrInst* gepInst;
+                for (auto &Op : L.operands()) {
+                    if (auto* expr = dyn_cast<ConstantExpr>(Op)) {
+                        if (expr->getOpcode() == Instruction::GetElementPtr) {
+                            GEP = dyn_cast<GetElementPtrInst>(expr->getAsInstruction());
+                            GEP->insertBefore(&L);
+                            
+                            int count = 0;
+                            for (auto &GOp : GEP->operands()) {
+                                if (count) {
+                                    gepIndices.push_back(GOp);
+                                }
+                                count++;
+                            }
+                            gepInst = handleGEP(*GEP, newType, L);
+                            foundGEP = true;
+                            GEP->eraseFromParent();
+                        }
+                    } else {}
+                }
+                if (!foundGEP ) {
+                    return;
+                }
+
+                errs() << "LOAD " << L << "\n";
+                gepInst->insertBefore(&L);
+                LoadInst* newL = (LoadInst*)L.clone();
+                
+                newL->insertBefore(&L);
+                
+                newL->setOperand(0,gepInst);
+                
+                errs() << *newL<< " OP \n";
+                L.replaceAllUsesWith(newL);
+                L.eraseFromParent();
             }
 
             void visitStoreInst(StoreInst &L){
@@ -103,62 +102,32 @@ namespace llvm {
                 }
                 std::vector<Value*> gepIndices;
                 bool foundGEP = false;
+                GetElementPtrInst* newGEP;
+                GetElementPtrInst* GEP;
                 for (auto &Op : L.operands()) {
                     if (auto* expr = dyn_cast<ConstantExpr>(Op)){
                         if (expr->getOpcode() == Instruction::GetElementPtr) {
-                            GetElementPtrInst* GEP = dyn_cast<GetElementPtrInst>(expr->getAsInstruction());
+                            // check if its actually using the global
+                            GEP = dyn_cast<GetElementPtrInst>(expr->getAsInstruction());
                             GEP->insertBefore(&L);
-                            int count = 0;
-                            for (auto &GOp : GEP->operands()) {
-                                errs() << *GOp << "\n";
-                                if (count) {
-                                    gepIndices.push_back(GOp);
-                                }
-                                count++;
-                            }
                             foundGEP = true;
+                            newGEP = handleGEP(*GEP, newType, L);
                             GEP->eraseFromParent();
                         }
                     } else {
                     }
-                
                 }
-
-                if (!foundGEP) {
-                    return;
-                }
-                int numIndices = gepIndices.size();
-                if (numIndices == 3) {
-                    std::swap(gepIndices[numIndices - 1], gepIndices[numIndices - 2]);
-                }
-                
-                //errs() << gepIndices[numIndices - 1] << "1st \n";
-                //errs() << gepIndices[numIndices - 2] << "2nd \n";
-                
-
-                IRBuilder<> builder(L.getContext());
-                PointerType *pointerType = dyn_cast<PointerType>(globalVar->getType());
-                ArrayType* gVtype = ArrayType::get(newType, 4);
-                Type* GEPSourceType = gVtype;
-                if ( numIndices == 2 && gepIndices[0]->getType()->getIntegerBitWidth() == 32 && gepIndices[1]->getType()->getIntegerBitWidth() == 32) {
-                    GEPSourceType = newType;
-                }
-                llvm::GetElementPtrInst* gepInst = llvm::GetElementPtrInst::CreateInBounds(
-                    GEPSourceType, globalVar, gepIndices, "hi");
-                
+                if (!foundGEP) { return; }
+                                
                 Type *loadType = L.getType();
                 StoreInst* newL = (StoreInst*)L.clone();
                 
                 newL->insertBefore(&L);
-                gepInst->insertBefore(newL);
-                newL->setOperand(1, gepInst);
-                errs() << L << " removed\n";
-                errs() << *gepInst << "\n";
-                errs() << *newL<< " new \n";
-                
+                newGEP->insertBefore(newL);
+                newL->setOperand(1, newGEP);
+                L.replaceAllUsesWith(newL);
                 
                 L.eraseFromParent();
-                //newL->eraseFromParent();
             }
 
             void visitGetElementPtrInst(GetElementPtrInst &GEP) {
@@ -166,7 +135,7 @@ namespace llvm {
                     return;
                 }
                 errs() << "Visit GEP\n";
-                GetElementPtrInst* new_instruction = handleGEP(GEP);
+                GetElementPtrInst* new_instruction = handleGEP(GEP, newType, GEP);
                 new_instruction->insertBefore(&GEP);
                 GEP.replaceAllUsesWith(new_instruction);
                 GEP.eraseFromParent();

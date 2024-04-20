@@ -40,7 +40,21 @@ int main()
   obj.c[1] = 6;
   obj.c[2] = 7;
   obj.c[3] = 8;
-  printf("%p %p %p\n", &obj.a[0], &obj.a[1], &obj.c[0]);
+
+  //int a = obj.a[0];
+  int b = obj.a[1];
+  int c = obj.a[2];
+  int d = obj.a[3];
+  int e = obj.b[0];
+  // obj.b[1];
+  // obj.b[2];
+  // obj.b[3];
+  // obj.c[0];
+  // obj.c[1];
+  // obj.c[2];
+  // obj.c[3];
+  printf("%d %d %d %d\n", b, c, d, e);
+  //printf("%p %p %p\n", &obj.a[0], &obj.a[1], &obj.c[0]);
   /*
   0 1 0
   0 1 0
