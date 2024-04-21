@@ -1,4 +1,4 @@
-# Install script for directory: /n/eecs583a/home/rpatt/Indirection/hw1pass
+# Install script for directory: /n/eecs583a/home/rpatt/FalseSharing583/hw1pass
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -49,7 +49,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xHW1Passx" OR NOT CMAKE_INSTALL_COMP
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/HW1Pass.so"
          RPATH "\$ORIGIN/../lib")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE MODULE FILES "/n/eecs583a/home/rpatt/Indirection/benchmark1/hw1pass/HW1Pass.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE MODULE FILES "/n/eecs583a/home/rpatt/FalseSharing583/benchmark1/hw1pass/HW1Pass.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/HW1Pass.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/HW1Pass.so")
     file(RPATH_CHANGE

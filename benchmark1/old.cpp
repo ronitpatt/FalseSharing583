@@ -53,6 +53,7 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
           if (Alloca->getAllocatedType()->isArrayTy()) {
 
             Alloca_global = Alloca;
+            // IRBuilder<> Builder(Alloca_global);
 
 
             // Query cache block size information
@@ -82,7 +83,6 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
 
     // Alignment : 
 
-    IRBuilder<> Builder(Alloca_global);
 
     // for (const auto& pair : idx_to_align) {
     //     for(int x: pair.second){

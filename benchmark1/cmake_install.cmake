@@ -1,4 +1,4 @@
-# Install script for directory: /n/eecs583a/home/rpatt/Indirection
+# Install script for directory: /n/eecs583a/home/rpatt/FalseSharing583
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/n/eecs583a/home/rpatt/Indirection/benchmark1/hw1pass/cmake_install.cmake")
+  include("/n/eecs583a/home/rpatt/FalseSharing583/benchmark1/hw1pass/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -55,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/n/eecs583a/home/rpatt/Indirection/benchmark1/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/n/eecs583a/home/rpatt/FalseSharing583/benchmark1/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

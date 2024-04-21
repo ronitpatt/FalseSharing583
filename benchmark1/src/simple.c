@@ -15,6 +15,16 @@ float fAdd(float a, float b){
 }
 
 
+// Before: 
+// int [2][4]
+// After: 
+// int [4][2]
+
+
+// Before: int A[4], int B[4]
+// After: int [A0, B0, A1, B1 ...]
+
+
 int main(){
 
 // int A[SIZE] = {0};

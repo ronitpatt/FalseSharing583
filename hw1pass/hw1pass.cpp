@@ -95,8 +95,6 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
 
     // Alignment : 
 
-    errs() << "Error Flag\n";
-
    
 
     for (const auto& pair : idx_to_align) {
