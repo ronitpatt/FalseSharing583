@@ -66,7 +66,6 @@ int main()
     printf("%d %d %d \n", ptr[0], ptr[1], ptr[2]);
     ptr+=3;
   }
-  
 
   return 1;
 }

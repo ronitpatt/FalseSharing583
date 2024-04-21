@@ -119,7 +119,6 @@ namespace llvm {
                 }
                 if (!foundGEP) { return; }
                                 
-                Type *loadType = L.getType();
                 StoreInst* newL = (StoreInst*)L.clone();
                 
                 newL->insertBefore(&L);
@@ -131,14 +130,36 @@ namespace llvm {
             }
 
             void visitGetElementPtrInst(GetElementPtrInst &GEP) {
-                if (oldType != GEP.getSourceElementType()) {
-                    return;
+                // if (oldType != GEP.getSourceElementType()) {
+                //     return;
+                // }
+                // if (GEP.getSourceElementType() != some ptr type) {
+
+                if (auto* expr = dyn_cast<ConstantExpr>(GEP.getOperand(0))) {
+                        if (expr->getOpcode() == Instruction::GetElementPtr) {
+
+                            errs() << "FOUND NESTED GEP\n";
+
+                            GetElementPtrInst* nestedGEP = dyn_cast<GetElementPtrInst>(expr->getAsInstruction());
+                            nestedGEP->insertBefore(&GEP);
+                            GetElementPtrInst* newGEP = handleGEP(*nestedGEP, newType, GEP);
+                            nestedGEP->eraseFromParent();
+                            
+                            GetElementPtrInst* newG = (GetElementPtrInst*)GEP.clone();
+                            newG->insertBefore(&GEP);
+                            newGEP->insertBefore(newG);
+                            newG->setOperand(0, newGEP);
+                            GEP.replaceAllUsesWith(newG);
+                            GEP.eraseFromParent();
+                        }
+                } else if (oldType == GEP.getSourceElementType()){
+                    errs() << "Visit GEP\n";
+                    GetElementPtrInst* new_instruction = handleGEP(GEP, newType, GEP);
+                    new_instruction->insertBefore(&GEP);
+                    GEP.replaceAllUsesWith(new_instruction);
+                    GEP.eraseFromParent();
+
                 }
-                errs() << "Visit GEP\n";
-                GetElementPtrInst* new_instruction = handleGEP(GEP, newType, GEP);
-                new_instruction->insertBefore(&GEP);
-                GEP.replaceAllUsesWith(new_instruction);
-                GEP.eraseFromParent();
             }
     };
 };
