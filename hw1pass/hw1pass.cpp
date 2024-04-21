@@ -47,6 +47,8 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
 
     errs() << "FLAG 1\n ";
 
+    LLVMContext &Ctx = F.getContext();
+
 
     for (auto &BB : F) {
       for (auto &I : BB) {
@@ -55,7 +57,7 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
           // assume num processors 
           errs() << "FLAG 2\n ";
           
-          if (Alloca->getAllocatedType()->isArrayTy()) {
+          if (Alloca->getAllocatedType()->isArrayTy()) { // finds array type: 
             
             errs() << "FLAG 3\n ";
 
@@ -72,6 +74,29 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
             uint64_t ElemSize = F.getParent()->getDataLayout().getTypeAllocSize(ElemTy);
             unsigned BaseAlignment = alignof(Alloca->getAllocatedType()->getArrayElementType());
 
+            Value *ArrayPtr = Alloca;
+
+            for (unsigned i = 0; i < Alloca->getAllocatedType()->getArrayNumElements(); ++i) {
+              errs() << "Num Elements\n ";
+              // get alignment memory
+
+              // 1. get current spot in memory
+              // 2. switch them around
+
+              unsigned Offset = i * sizeof(int); // Example: Assuming integer array, 4 bytes per element
+
+              // Create GEP (GetElementPtr) instruction to access the i-th element
+              IRBuilder<> Builder(&BB, BB.getFirstInsertionPt());
+              Value *ElementPtr = Builder.CreateGEP(ElemTy, ArrayPtr, {Builder.getInt32(0), Builder.getInt32(i)});
+
+               errs() << "Heres\n ";
+
+              // Print the address of the current element
+
+              Value *ElementAddr = Builder.CreatePtrToInt(ElementPtr, Type::getInt64Ty(Ctx));
+              Function *PtrToIntFunc = Intrinsic::getDeclaration(F.getParent(), Intrinsic::ptrtoint, {ElementAddr->getType()});
+              Builder.CreateCall(PtrToIntFunc, {ElementAddr}, "");
+            }
             // Builder(Alloca);
 
             for (unsigned i = 0; i < dyn_cast<ConstantInt>(Alloca->getArraySize())->getZExtValue(); ++i) { // save cache block for every element
@@ -101,6 +126,7 @@ struct HW1Pass : public PassInfoMixin<HW1Pass> {
         for(auto x: pair.second){ // pair of alignment idx and alloca address
           IRBuilder<> Builder(x.second);
           auto *NewAlloca = Builder.CreateAlloca(ElemTy);
+          errs() << "X First: " << x.first << "\n";
           NewAlloca->setAlignment(Align(x.first));
         }
     }
