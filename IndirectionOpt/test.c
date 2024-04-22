@@ -4,13 +4,13 @@
 #include <string.h>
 #include <unistd.h>
 
-char word[] = "helloworldba";
+char word[] = "helloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworld";
 char* word_two;
 
 int main()
 {
   // allocate and fill heap array
-  word_two = (char *)malloc(13);
+  word_two = (char *)malloc(strlen(word));
   strcpy(word_two, word);                        
 
   int pid = fork();
