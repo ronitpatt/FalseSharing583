@@ -29,14 +29,17 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
   for (GlobalVariable &GV : M.globals()) {
     if (GV.hasInitializer()) {
       Constant *Init = GV.getInitializer();
-      if (ArrayType *AT = dyn_cast<ArrayType>(Init->getType())) {
+      errs() << "GV: " << GV.getName() << " Type: " << *Init->getType() << "\n";
+
+
+      if (1/*ArrayType *AT = dyn_cast<ArrayType>(Init->getType())*/) {
         // found an array
         errs() << "Transforming array: " << GV.getName() << "\n";
 
         // assuming we're working with arrays of chars/bytes
         Type *IntType = Type::getInt8Ty(Context);
         Type *IntPtrType = Type::getInt8PtrTy(Context);
-        unsigned NumElements = AT->getNumElements();
+        unsigned NumElements = 11;
 
         // Assuming the first element should be even-indexed
         unsigned NumOddElements = NumElements / 2;
@@ -59,7 +62,12 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
 
         // find all of the actual even and odd data pieces
         for (unsigned i = 0; i < NumElements; ++i) {
+                  errs() << "Transforming array: " << GV.getName() << "\n";
+                  errs() << "Transforming array: " << Init->getAggregateElement(i) << "\n";
+
           Constant *ElementValue = dyn_cast<Constant>(Init->getAggregateElement(i));
+                  errs() << "Transforming array: " << Init->getAggregateElement(i) << "\n";
+
           if (i % 2 == 0) {
             EvenElements.push_back(ElementValue);
           } else {
@@ -106,40 +114,53 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         // initialize the array of pointers with PtrElements (where we just put the pointers to even/odd elems)
         PtrArrayGV->setInitializer(ConstantArray::get(PtrArrayType, PtrElements));
         
-        SmallVector<User*, 8> Users(GV.user_begin(), GV.user_end());
+        GlobalVariable *wordTwoGV = M.getNamedGlobal("word_two");
+        SmallVector<User*, 8> Users(wordTwoGV->user_begin(), wordTwoGV->user_end());
 
         for (User* user : Users) {
-          if (auto* inst = dyn_cast<Instruction>(user)) {
-            errs() << "user instruction of: " << *inst  << " user is " << *user << "\n";
+          if (llvm::Instruction *inst = llvm::dyn_cast<llvm::Instruction>(user)) {
+            // Now, iterate over the users of this instruction.
+            llvm::SmallVector<llvm::User*, 8> instUsers(inst->user_begin(), inst->user_end());
+            for (llvm::User* instUser : instUsers) {
 
-            IRBuilder<> Builder(inst);
+                //if (auto* inst = dyn_cast<Instruction>(user)) {
+                if (llvm::Instruction *userInst = llvm::dyn_cast<llvm::Instruction>(instUser)) {
+                  errs() << "user instruction of: " << *userInst  << " user is " << *instUser << "\n";
 
-            Type* IntPtrType = Builder.getInt8PtrTy(); // Get the LLVM type for 'i8*'.
+                  IRBuilder<> Builder(userInst);
 
-            Builder.SetInsertPoint(inst);
+                  Type* IntPtrType = Builder.getInt8PtrTy(); // Get the LLVM type for 'i8*'.
 
-            // Assuming the operand is used within a GEP instruction
-            if (auto* GEP = dyn_cast<GetElementPtrInst>(inst)) {
-              errs() << "found instruction with usage of old array: " << *GEP << "\n";
+                  Builder.SetInsertPoint(userInst);
 
-              Value* index = GEP->getOperand(2);
+                  // Assuming the operand is used within a GEP instruction
+                  if (auto* GEP = dyn_cast<GetElementPtrInst>(userInst)) {
+                    errs() << "found instruction with usage of old array: " << *GEP << "\n";
 
-              std::vector<Value*> IndexVec = {Builder.getInt64(0), index}; // Where index is the LLVM value for your actual index.
+                    Value* index = GEP->getOperand(1);
+                    //errs() << "operand" << *index << "\n";
 
-              // Create a GEP to access the pointer in the new array of pointers
-              Value* ptrGEP = Builder.CreateInBoundsGEP(PtrArrayType, PtrArrayGV, IndexVec, "");
+                    std::vector<Value*> IndexVec = {Builder.getInt64(0), index}; // Where index is the LLVM value for your actual index.
 
-              // Load the pointer to i8 (char*)
-              LoadInst* loadedPointer = Builder.CreateLoad(Builder.getInt8PtrTy(), ptrGEP, "");
+                    // Create a GEP to access the pointer in the new array of pointers
+                    Value* ptrGEP = Builder.CreateInBoundsGEP(IntPtrType, PtrArrayGV, index, "");
 
-              // Load the actual i8 value from the loaded pointer
-              // LoadInst* loadedValue = Builder.CreateLoad(Builder.getInt8Ty(), loadedPointer, "");
+                    // Load the pointer to i8 (char*)
+                    LoadInst* loadedPointer = Builder.CreateLoad(Builder.getInt8PtrTy(), ptrGEP, "");
 
-              // Replace the old GEP's usage with the loaded i8 value
-              GEP->replaceAllUsesWith(loadedPointer);
+                    // Load the actual i8 value from the loaded pointer
+                    // LoadInst* loadedValue = Builder.CreateLoad(Builder.getInt8Ty(), loadedPointer, "");
 
-              // Remove the old GEP from the parent basic block
-              GEP->eraseFromParent();
+                    // Replace the old GEP's usage with the loaded i8 value
+                    GEP->replaceAllUsesWith(loadedPointer);
+
+                    // Remove the old GEP from the parent basic block
+                    GEP->eraseFromParent();
+
+                    inst->eraseFromParent();
+                  }
+                }
+
             }
           }
         }
@@ -147,7 +168,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         errs() << "flag:\n";
 
         // Now remove the original global variable
-        GV.eraseFromParent();
+        //wordTwoGV->eraseFromParent();
       }
 
     }
