@@ -32,14 +32,14 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
       errs() << "GV: " << GV.getName() << " Type: " << *Init->getType() << "\n";
 
 
-      if (1/*ArrayType *AT = dyn_cast<ArrayType>(Init->getType())*/) {
+      if (ArrayType *AT = dyn_cast<ArrayType>(Init->getType())) {
         // found an array
         errs() << "Transforming array: " << GV.getName() << "\n";
 
         // assuming we're working with arrays of chars/bytes
         Type *IntType = Type::getInt8Ty(Context);
         Type *IntPtrType = Type::getInt8PtrTy(Context);
-        unsigned NumElements = 11;
+        unsigned NumElements = AT->getNumElements();
 
         // Assuming the first element should be even-indexed
         unsigned NumOddElements = NumElements / 2;
@@ -62,12 +62,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
 
         // find all of the actual even and odd data pieces
         for (unsigned i = 0; i < NumElements; ++i) {
-                  errs() << "Transforming array: " << GV.getName() << "\n";
-                  errs() << "Transforming array: " << Init->getAggregateElement(i) << "\n";
-
           Constant *ElementValue = dyn_cast<Constant>(Init->getAggregateElement(i));
-                  errs() << "Transforming array: " << Init->getAggregateElement(i) << "\n";
-
           if (i % 2 == 0) {
             EvenElements.push_back(ElementValue);
           } else {
@@ -148,9 +143,6 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
                     // Load the pointer to i8 (char*)
                     LoadInst* loadedPointer = Builder.CreateLoad(Builder.getInt8PtrTy(), ptrGEP, "");
 
-                    // Load the actual i8 value from the loaded pointer
-                    // LoadInst* loadedValue = Builder.CreateLoad(Builder.getInt8Ty(), loadedPointer, "");
-
                     // Replace the old GEP's usage with the loaded i8 value
                     GEP->replaceAllUsesWith(loadedPointer);
 
@@ -168,11 +160,10 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         errs() << "flag:\n";
 
         // Now remove the original global variable
-        //wordTwoGV->eraseFromParent();
+        // wordTwoGV->eraseFromParent();
       }
 
     }
-
     //temp:
     break;
   }
