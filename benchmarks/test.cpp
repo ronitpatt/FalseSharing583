@@ -10,6 +10,7 @@ struct c {
     int front;
     //char pad[60];
     int back;
+    short front2;
   }; // is it ok to pad this inside struct
 
 int elements_per_thread = 1000000;
@@ -19,6 +20,7 @@ void* work (void* obj) {
     //printf("inside thread\n");
     c* ptr = (c*)obj;
     ptr->front++;
+    ptr->front2++;
     sched_yield();
     // printf("%d\n", ptr->front);
   }

@@ -49,12 +49,17 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/aryan/Documents/FalseSharing583/build/RPass/cmake_install.cmake")
+  include("/home/aryan/Documents/FalseSharing583/build/ReorderPass/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
   include("/home/aryan/Documents/FalseSharing583/build/PrintPass/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/aryan/Documents/FalseSharing583/build/GroupTPass/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)

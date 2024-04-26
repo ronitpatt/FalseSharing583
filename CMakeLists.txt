@@ -8,5 +8,6 @@ add_definitions(${LLVM_DEFINITIONS_LIST})
 include_directories(${LLVM_INCLUDE_DIRS})
 
 add_subdirectory(FsharingPass)
-add_subdirectory(RPass)
+add_subdirectory(ReorderPass)
 add_subdirectory(PrintPass)
+add_subdirectory(GroupTPass)

@@ -3,7 +3,7 @@ source_filename = "test.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.c = type { i32, i32 }
+%struct.c = type { i32, i32, i16 }
 
 @.str = private unnamed_addr constant [7 x i8] c"%s %p\0A\00", align 1
 @elements_per_thread = dso_local global i32 1000000, align 4
@@ -47,13 +47,18 @@ for.body:                                         ; preds = %for.cond
   %4 = load i32, ptr %front, align 4
   %inc = add nsw i32 %4, 1
   store i32 %inc, ptr %front, align 4
+  %5 = load ptr, ptr %ptr, align 8
+  %front2 = getelementptr inbounds %struct.c, ptr %5, i32 0, i32 2
+  %6 = load i16, ptr %front2, align 4
+  %inc1 = add i16 %6, 1
+  store i16 %inc1, ptr %front2, align 4
   %call = call i32 @sched_yield() #5
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
-  %5 = load i32, ptr %i, align 4
-  %inc1 = add nsw i32 %5, 1
-  store i32 %inc1, ptr %i, align 4
+  %7 = load i32, ptr %i, align 4
+  %inc2 = add nsw i32 %7, 1
+  store i32 %inc2, ptr %i, align 4
   br label %for.cond, !llvm.loop !6
 
 for.end:                                          ; preds = %for.cond

@@ -87,7 +87,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"PrintPass\" \"RPass\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"GroupTPass\" \"PrintPass\" \"ReorderPass\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -253,43 +253,43 @@ install-FsharingPass-stripped/fast:
 .PHONY : install-FsharingPass-stripped/fast
 
 #=============================================================================
-# Target rules for targets named RPass
+# Target rules for targets named ReorderPass
 
 # Build rule for target.
-RPass: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 RPass
-.PHONY : RPass
+ReorderPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ReorderPass
+.PHONY : ReorderPass
 
 # fast build rule for target.
-RPass/fast:
-	$(MAKE) $(MAKESILENT) -f RPass/CMakeFiles/RPass.dir/build.make RPass/CMakeFiles/RPass.dir/build
-.PHONY : RPass/fast
+ReorderPass/fast:
+	$(MAKE) $(MAKESILENT) -f ReorderPass/CMakeFiles/ReorderPass.dir/build.make ReorderPass/CMakeFiles/ReorderPass.dir/build
+.PHONY : ReorderPass/fast
 
 #=============================================================================
-# Target rules for targets named install-RPass
+# Target rules for targets named install-ReorderPass
 
 # Build rule for target.
-install-RPass: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-RPass
-.PHONY : install-RPass
+install-ReorderPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-ReorderPass
+.PHONY : install-ReorderPass
 
 # fast build rule for target.
-install-RPass/fast:
-	$(MAKE) $(MAKESILENT) -f RPass/CMakeFiles/install-RPass.dir/build.make RPass/CMakeFiles/install-RPass.dir/build
-.PHONY : install-RPass/fast
+install-ReorderPass/fast:
+	$(MAKE) $(MAKESILENT) -f ReorderPass/CMakeFiles/install-ReorderPass.dir/build.make ReorderPass/CMakeFiles/install-ReorderPass.dir/build
+.PHONY : install-ReorderPass/fast
 
 #=============================================================================
-# Target rules for targets named install-RPass-stripped
+# Target rules for targets named install-ReorderPass-stripped
 
 # Build rule for target.
-install-RPass-stripped: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-RPass-stripped
-.PHONY : install-RPass-stripped
+install-ReorderPass-stripped: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-ReorderPass-stripped
+.PHONY : install-ReorderPass-stripped
 
 # fast build rule for target.
-install-RPass-stripped/fast:
-	$(MAKE) $(MAKESILENT) -f RPass/CMakeFiles/install-RPass-stripped.dir/build.make RPass/CMakeFiles/install-RPass-stripped.dir/build
-.PHONY : install-RPass-stripped/fast
+install-ReorderPass-stripped/fast:
+	$(MAKE) $(MAKESILENT) -f ReorderPass/CMakeFiles/install-ReorderPass-stripped.dir/build.make ReorderPass/CMakeFiles/install-ReorderPass-stripped.dir/build
+.PHONY : install-ReorderPass-stripped/fast
 
 #=============================================================================
 # Target rules for targets named PrintPass
@@ -330,6 +330,45 @@ install-PrintPass-stripped/fast:
 	$(MAKE) $(MAKESILENT) -f PrintPass/CMakeFiles/install-PrintPass-stripped.dir/build.make PrintPass/CMakeFiles/install-PrintPass-stripped.dir/build
 .PHONY : install-PrintPass-stripped/fast
 
+#=============================================================================
+# Target rules for targets named GroupTPass
+
+# Build rule for target.
+GroupTPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GroupTPass
+.PHONY : GroupTPass
+
+# fast build rule for target.
+GroupTPass/fast:
+	$(MAKE) $(MAKESILENT) -f GroupTPass/CMakeFiles/GroupTPass.dir/build.make GroupTPass/CMakeFiles/GroupTPass.dir/build
+.PHONY : GroupTPass/fast
+
+#=============================================================================
+# Target rules for targets named install-GroupTPass
+
+# Build rule for target.
+install-GroupTPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-GroupTPass
+.PHONY : install-GroupTPass
+
+# fast build rule for target.
+install-GroupTPass/fast:
+	$(MAKE) $(MAKESILENT) -f GroupTPass/CMakeFiles/install-GroupTPass.dir/build.make GroupTPass/CMakeFiles/install-GroupTPass.dir/build
+.PHONY : install-GroupTPass/fast
+
+#=============================================================================
+# Target rules for targets named install-GroupTPass-stripped
+
+# Build rule for target.
+install-GroupTPass-stripped: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-GroupTPass-stripped
+.PHONY : install-GroupTPass-stripped
+
+# fast build rule for target.
+install-GroupTPass-stripped/fast:
+	$(MAKE) $(MAKESILENT) -f GroupTPass/CMakeFiles/install-GroupTPass-stripped.dir/build.make GroupTPass/CMakeFiles/install-GroupTPass-stripped.dir/build
+.PHONY : install-GroupTPass-stripped/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -346,15 +385,18 @@ help:
 	@echo "... acc_gen"
 	@echo "... install-FsharingPass"
 	@echo "... install-FsharingPass-stripped"
+	@echo "... install-GroupTPass"
+	@echo "... install-GroupTPass-stripped"
 	@echo "... install-PrintPass"
 	@echo "... install-PrintPass-stripped"
-	@echo "... install-RPass"
-	@echo "... install-RPass-stripped"
+	@echo "... install-ReorderPass"
+	@echo "... install-ReorderPass-stripped"
 	@echo "... intrinsics_gen"
 	@echo "... omp_gen"
 	@echo "... FsharingPass"
+	@echo "... GroupTPass"
 	@echo "... PrintPass"
-	@echo "... RPass"
+	@echo "... ReorderPass"
 .PHONY : help
 
 

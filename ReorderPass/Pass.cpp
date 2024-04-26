@@ -10,6 +10,9 @@
 #include <map>
 #include "llvm/Support/raw_ostream.h"
 #include "Pass.h"
+#include <fstream>
+#include <sstream>
+#include <unordered_map>
 
 namespace llvm {
 namespace {
@@ -27,10 +30,9 @@ namespace {
     }
   }
 
-  void padStruct(StructType* OldStructType, Module& M) {
+  void padStruct(StructType* OldStructType, Module& M, std::vector<int> newOrder) {
     std::vector<Type *> FieldTypes;
 
-    std::vector<int> newOrder = {1, 3, 0, 2, 4};
     
     for (unsigned i = 0; i < OldStructType->getNumElements(); ++i) {
         //errs() << "PADDING STRUCT" << OldStructType->getElement(i) << "\n";
@@ -41,13 +43,34 @@ namespace {
     replace_types(M, OldStructType, newStructType, {}, newOrder);
   }
 
-  struct RPass : public PassInfoMixin<RPass> {
+  struct ReorderPass : public PassInfoMixin<ReorderPass> {
       PreservedAnalyses run(Module &M, ModuleAnalysisManager &) {
         errs () << "HI\n"; 
+        std::ifstream file ("reorder.txt");
+        std::string line, structTypeName;
+        std::unordered_map<std::string, std::vector<int> > structOrder;
+        
+        while (getline(file, line)) {
+          errs() << "READING LINE FROM REORDER.TXT\n";
+          std::istringstream ss {line};
+          ss >> structTypeName;
+          structOrder[structTypeName] = {};
+          int offset;
+          while (ss >> offset) {
+            errs() << offset << " ";
+            structOrder[structTypeName].push_back(offset);
+          }   
+          errs() << "\n";       
+        }
+        
         auto structlist = M.getIdentifiedStructTypes();
         for (StructType* st : structlist) {
           // TODO get all labels of functions in the struct 
-          padStruct(st, M);
+          errs() << "STRUCT NAME: " << st->getName().str() << "\n";
+          if (auto iter = structOrder.find(st->getName().str()); iter != structOrder.end()) {
+            errs() << "FOUND STRUCT TO PAD\n";
+            padStruct(st, M, iter->second);
+          }
         }
         return PreservedAnalyses::all();
       }
@@ -58,13 +81,13 @@ namespace {
 
 extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginInfo() {
   return {
-    LLVM_PLUGIN_API_VERSION, "RPass", "v0.1",
+    LLVM_PLUGIN_API_VERSION, "ReorderPass", "v0.1",
     [](PassBuilder &PB) {
       PB.registerPipelineParsingCallback(
         [](StringRef Name, ModulePassManager &MPM,
         ArrayRef<PassBuilder::PipelineElement>) {
-          if (Name == "r-pass") {
-            MPM.addPass(RPass());
+          if (Name == "reorder-pass") {
+            MPM.addPass(ReorderPass());
             return true;
           }
           return false;

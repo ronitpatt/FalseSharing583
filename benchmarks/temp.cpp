@@ -1,11 +1,20 @@
 #include <stdio.h>
 #include <unistd.h>
 
-
-int main() {
-  
+struct c {
   int a;
-  printf("ptr: %p\n", &a); 
+  int b;
+  short c;
+};
+void doPrint(char * name, void * thing) {
+  printf("%s %p\n", name, thing);
+}
+int main() {
+  c obj;
+  printf("ptr: %p\n", &obj.a); 
+  printf("ptr: %p\n", &obj.b); 
+    printf("ptr: %p\n", &obj.c); 
+
 }
 // #include <thread>
 // #include <cstatomic>
