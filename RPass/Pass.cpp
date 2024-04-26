@@ -30,7 +30,7 @@ namespace {
   void padStruct(StructType* OldStructType, Module& M) {
     std::vector<Type *> FieldTypes;
 
-    std::vector<int> newOrder = {1, 0, 2, 3};
+    std::vector<int> newOrder = {1, 3, 0, 2, 4};
     
     for (unsigned i = 0; i < OldStructType->getNumElements(); ++i) {
         //errs() << "PADDING STRUCT" << OldStructType->getElement(i) << "\n";

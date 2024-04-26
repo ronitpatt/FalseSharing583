@@ -26,3 +26,12 @@
 /home/aryan/Documents/FalseSharing583/build/RPass/CMakeFiles/install.dir
 /home/aryan/Documents/FalseSharing583/build/RPass/CMakeFiles/install/local.dir
 /home/aryan/Documents/FalseSharing583/build/RPass/CMakeFiles/install/strip.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/PrintPass.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/install-PrintPass.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/install-PrintPass-stripped.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/edit_cache.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/rebuild_cache.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/list_install_components.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/install.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/install/local.dir
+/home/aryan/Documents/FalseSharing583/build/PrintPass/CMakeFiles/install/strip.dir

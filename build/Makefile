@@ -87,7 +87,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"RPass\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"PrintPass\" \"RPass\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -291,6 +291,45 @@ install-RPass-stripped/fast:
 	$(MAKE) $(MAKESILENT) -f RPass/CMakeFiles/install-RPass-stripped.dir/build.make RPass/CMakeFiles/install-RPass-stripped.dir/build
 .PHONY : install-RPass-stripped/fast
 
+#=============================================================================
+# Target rules for targets named PrintPass
+
+# Build rule for target.
+PrintPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 PrintPass
+.PHONY : PrintPass
+
+# fast build rule for target.
+PrintPass/fast:
+	$(MAKE) $(MAKESILENT) -f PrintPass/CMakeFiles/PrintPass.dir/build.make PrintPass/CMakeFiles/PrintPass.dir/build
+.PHONY : PrintPass/fast
+
+#=============================================================================
+# Target rules for targets named install-PrintPass
+
+# Build rule for target.
+install-PrintPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-PrintPass
+.PHONY : install-PrintPass
+
+# fast build rule for target.
+install-PrintPass/fast:
+	$(MAKE) $(MAKESILENT) -f PrintPass/CMakeFiles/install-PrintPass.dir/build.make PrintPass/CMakeFiles/install-PrintPass.dir/build
+.PHONY : install-PrintPass/fast
+
+#=============================================================================
+# Target rules for targets named install-PrintPass-stripped
+
+# Build rule for target.
+install-PrintPass-stripped: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-PrintPass-stripped
+.PHONY : install-PrintPass-stripped
+
+# fast build rule for target.
+install-PrintPass-stripped/fast:
+	$(MAKE) $(MAKESILENT) -f PrintPass/CMakeFiles/install-PrintPass-stripped.dir/build.make PrintPass/CMakeFiles/install-PrintPass-stripped.dir/build
+.PHONY : install-PrintPass-stripped/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -307,11 +346,14 @@ help:
 	@echo "... acc_gen"
 	@echo "... install-FsharingPass"
 	@echo "... install-FsharingPass-stripped"
+	@echo "... install-PrintPass"
+	@echo "... install-PrintPass-stripped"
 	@echo "... install-RPass"
 	@echo "... install-RPass-stripped"
 	@echo "... intrinsics_gen"
 	@echo "... omp_gen"
 	@echo "... FsharingPass"
+	@echo "... PrintPass"
 	@echo "... RPass"
 .PHONY : help
 

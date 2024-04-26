@@ -9,3 +9,4 @@ include_directories(${LLVM_INCLUDE_DIRS})
 
 add_subdirectory(FsharingPass)
 add_subdirectory(RPass)
+add_subdirectory(PrintPass)
