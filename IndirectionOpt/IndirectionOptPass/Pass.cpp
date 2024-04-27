@@ -29,7 +29,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
   for (GlobalVariable &GV : M.globals()) {
     if (GV.hasInitializer()) {
       Constant *Init = GV.getInitializer();
-      errs() << "GV: " << GV.getName() << " Type: " << *Init->getType() << "\n";
+      // errs() << "GV: " << GV.getName() << " Type: " << *Init->getType() << "\n";
 
 
       if (ArrayType *AT = dyn_cast<ArrayType>(Init->getType())) {
@@ -102,8 +102,8 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
           PtrElements.push_back(ElementPtr);
 
           // Print the element address expression
-          errs() << "Iteration: " << i << "\n";
-          errs() << "Element ptr: " << *ElementPtr << "\n"; // This should print the GEP expression, not the array itself
+          // errs() << "Iteration: " << i << "\n";
+          // errs() << "Element ptr: " << *ElementPtr << "\n"; // This should print the GEP expression, not the array itself
         }
 
 
@@ -121,7 +121,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
 
                 //if (auto* inst = dyn_cast<Instruction>(user)) {
                 if (llvm::Instruction *userInst = llvm::dyn_cast<llvm::Instruction>(instUser)) {
-                  errs() << "user instruction of: " << *userInst  << " user is " << *instUser << "\n";
+                  // errs() << "user instruction of: " << *userInst  << " user is " << *instUser << "\n";
 
                   IRBuilder<> Builder(userInst);
 
@@ -131,7 +131,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
 
                   // Assuming the operand is used within a GEP instruction
                   if (auto* GEP = dyn_cast<GetElementPtrInst>(userInst)) {
-                    errs() << "found instruction with usage of old array: " << *GEP << "\n";
+                    // errs() << "found instruction with usage of old array: " << *GEP << "\n";
 
                     Value* index = GEP->getOperand(1);
                     //errs() << "operand" << *index << "\n";
@@ -158,7 +158,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
           }
         }
     
-        errs() << "flag:\n";
+        // errs() << "flag:\n";
 
         // Now remove the original global variable
         // wordTwoGV->eraseFromParent();
@@ -169,8 +169,8 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
     break;
   }
 
-errs() << "Module state before potential crash: \n";
-M.print(llvm::errs(), nullptr);
+// errs() << "Module state before potential crash: \n";
+// M.print(llvm::errs(), nullptr);
 
   // Since we are altering the IR in place, we need to return `PreservedAnalyses::none()`.
   return PreservedAnalyses::none();
