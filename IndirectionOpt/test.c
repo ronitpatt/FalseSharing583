@@ -15,7 +15,7 @@ void* work1(void* arg) {
   printf("\na = %d\n", a);
   for (int i = 0; i < strlen(word_two); i++){
     word_two[i] = word_two[i] + a;
-    // fprintf(stdout,"%c", word_two[i]);
+    fprintf(stdout,"%c", word_two[i]);
   }
   return NULL;
 }
