@@ -34,7 +34,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
 
       if (ArrayType *AT = dyn_cast<ArrayType>(Init->getType())) {
         // found an array
-        errs() << "Transforming array: " << GV.getName() << "\n";
+        // errs() << "Transforming array: " << GV.getName() << "\n";
 
         // assuming we're working with arrays of chars/bytes
         Type *IntType = Type::getInt8Ty(Context);
