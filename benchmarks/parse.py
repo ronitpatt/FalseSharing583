@@ -70,3 +70,18 @@ print("--- REORDERED STRUCTS ---")
 for key in struct_map:
     with open("reorder.txt", "w") as outfile:
         outfile.write("struct." + key + " " + ' '.join(reorder_struct(struct_map[key])))
+padding = {}
+for key in struct_map:
+    elements = struct_map[key]
+    threads = defaultdict(lambda:0)
+    for item in elements:
+        if int(item[0]) > threads[item[1]]:
+            threads[item[1]] = int(item[0])
+    paddingAfter = sorted([threads[key] for key in threads])[:-1]
+    print(paddingAfter)
+    padding[key] = [str(val) for val in paddingAfter]
+print(padding)
+
+for key in padding:
+    with open("padding.txt", 'w') as outfile:
+        outfile.write(f"struct.{key}reorder "+ ' '.join(padding[key]))
