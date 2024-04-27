@@ -12,10 +12,14 @@ char* word_two;
 void* work1(void* arg) {
   int a = *((int *) arg);
 
-  printf("\na = %d\n", a);
+  // printf("\na = %d\n", a);
   for (int i = 0; i < strlen(word_two); i++){
-    word_two[i] = word_two[i] + a;
-    fprintf(stdout,"%c", word_two[i]);
+    if (a == 1 && !(i % 2)) {       //evens and first thread
+      word_two[i] = word_two[i] + 1;
+      // fprintf(stdout,"%c", word_two[i]);
+    } else if (a == 2 && (i % 2)) { //odds and second thread
+      word_two[i] = word_two[i] + 2;
+    }
   }
   return NULL;
 }
