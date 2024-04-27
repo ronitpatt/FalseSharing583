@@ -44,3 +44,12 @@
 /home/aryan/Documents/FalseSharing583/build/GroupTPass/CMakeFiles/install.dir
 /home/aryan/Documents/FalseSharing583/build/GroupTPass/CMakeFiles/install/local.dir
 /home/aryan/Documents/FalseSharing583/build/GroupTPass/CMakeFiles/install/strip.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/IndirectionPass.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/install-IndirectionPass.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/install-IndirectionPass-stripped.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/edit_cache.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/rebuild_cache.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/list_install_components.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/install.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/install/local.dir
+/home/aryan/Documents/FalseSharing583/build/IndirectionPass/CMakeFiles/install/strip.dir

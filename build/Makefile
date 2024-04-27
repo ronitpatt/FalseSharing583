@@ -87,7 +87,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"GroupTPass\" \"PrintPass\" \"ReorderPass\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"GroupTPass\" \"IndirectionPass\" \"PrintPass\" \"ReorderPass\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -369,6 +369,45 @@ install-GroupTPass-stripped/fast:
 	$(MAKE) $(MAKESILENT) -f GroupTPass/CMakeFiles/install-GroupTPass-stripped.dir/build.make GroupTPass/CMakeFiles/install-GroupTPass-stripped.dir/build
 .PHONY : install-GroupTPass-stripped/fast
 
+#=============================================================================
+# Target rules for targets named IndirectionPass
+
+# Build rule for target.
+IndirectionPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 IndirectionPass
+.PHONY : IndirectionPass
+
+# fast build rule for target.
+IndirectionPass/fast:
+	$(MAKE) $(MAKESILENT) -f IndirectionPass/CMakeFiles/IndirectionPass.dir/build.make IndirectionPass/CMakeFiles/IndirectionPass.dir/build
+.PHONY : IndirectionPass/fast
+
+#=============================================================================
+# Target rules for targets named install-IndirectionPass
+
+# Build rule for target.
+install-IndirectionPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-IndirectionPass
+.PHONY : install-IndirectionPass
+
+# fast build rule for target.
+install-IndirectionPass/fast:
+	$(MAKE) $(MAKESILENT) -f IndirectionPass/CMakeFiles/install-IndirectionPass.dir/build.make IndirectionPass/CMakeFiles/install-IndirectionPass.dir/build
+.PHONY : install-IndirectionPass/fast
+
+#=============================================================================
+# Target rules for targets named install-IndirectionPass-stripped
+
+# Build rule for target.
+install-IndirectionPass-stripped: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-IndirectionPass-stripped
+.PHONY : install-IndirectionPass-stripped
+
+# fast build rule for target.
+install-IndirectionPass-stripped/fast:
+	$(MAKE) $(MAKESILENT) -f IndirectionPass/CMakeFiles/install-IndirectionPass-stripped.dir/build.make IndirectionPass/CMakeFiles/install-IndirectionPass-stripped.dir/build
+.PHONY : install-IndirectionPass-stripped/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -387,6 +426,8 @@ help:
 	@echo "... install-FsharingPass-stripped"
 	@echo "... install-GroupTPass"
 	@echo "... install-GroupTPass-stripped"
+	@echo "... install-IndirectionPass"
+	@echo "... install-IndirectionPass-stripped"
 	@echo "... install-PrintPass"
 	@echo "... install-PrintPass-stripped"
 	@echo "... install-ReorderPass"
@@ -395,6 +436,7 @@ help:
 	@echo "... omp_gen"
 	@echo "... FsharingPass"
 	@echo "... GroupTPass"
+	@echo "... IndirectionPass"
 	@echo "... PrintPass"
 	@echo "... ReorderPass"
 .PHONY : help

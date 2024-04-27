@@ -10,6 +10,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../CMakeLists.txt"
   "../FsharingPass/CMakeLists.txt"
   "../GroupTPass/CMakeLists.txt"
+  "../IndirectionPass/CMakeLists.txt"
   "../PrintPass/CMakeLists.txt"
   "../ReorderPass/CMakeLists.txt"
   "CMakeFiles/3.22.1/CMakeCCompiler.cmake"
@@ -67,6 +68,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "ReorderPass/CMakeFiles/CMakeDirectoryInformation.cmake"
   "PrintPass/CMakeFiles/CMakeDirectoryInformation.cmake"
   "GroupTPass/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "IndirectionPass/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -87,4 +89,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "GroupTPass/CMakeFiles/GroupTPass.dir/DependInfo.cmake"
   "GroupTPass/CMakeFiles/install-GroupTPass.dir/DependInfo.cmake"
   "GroupTPass/CMakeFiles/install-GroupTPass-stripped.dir/DependInfo.cmake"
+  "IndirectionPass/CMakeFiles/IndirectionPass.dir/DependInfo.cmake"
+  "IndirectionPass/CMakeFiles/install-IndirectionPass.dir/DependInfo.cmake"
+  "IndirectionPass/CMakeFiles/install-IndirectionPass-stripped.dir/DependInfo.cmake"
   )

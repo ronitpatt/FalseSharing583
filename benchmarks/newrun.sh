@@ -18,16 +18,21 @@ elif [ $1 = "reorder" ]; then
     LoadPass="ReorderPass"
     PassName="reorder-pass"
     sh end.sh
-    
 elif [ $1 = "print" ]; then
     LoadPass="PrintPass"
     PassName="print-pass"
+elif [ $1 = "indirection" ]; then
+    LoadPass="IndirectionPass"
+    PassName="indirection-pass"
+elif [ $1 = "nopass" ]; then
+    LoadPass="FsharingPass"
+    PassName=""
 fi
 
 echo "Running $PassName"
 cd ../build && make && cd ../benchmarks
 if [ $# -eq 2 ]; then
-    clang -emit-llvm -S $2 -Xclang -disable-O0-optnone -O0 -o  test.ll -std=c++11 -stdlib=libc++ -fno-discard-value-names
+    clang -emit-llvm -S $2 -Xclang -disable-O0-optnone -o  test.ll -std=c++11 -stdlib=libc++ -fno-discard-value-names
 fi
 opt -load-pass-plugin=../build/$LoadPass/$LoadPass.so -passes=$PassName test.ll -f > test.bc 
 llvm-dis test.bc -o test.ll.out
