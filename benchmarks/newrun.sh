@@ -8,7 +8,7 @@ LoadPass=""
 PassName=""
 echo $#
 if [ $1 = "group" ]; then
-    LoadPass="GTPass"
+    LoadPass="GroupTPass"
     PassName="groupt-pass"
 elif [ $1 = "pad" ]; then
     LoadPass="FsharingPass"
