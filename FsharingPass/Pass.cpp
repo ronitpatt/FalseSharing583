@@ -33,20 +33,24 @@ void replace_types(Module &M, StructType *oldStructType, StructType *newStructTy
 
 }
 
-void padStruct(StructType* OldStructType, Module& M) {
+void padStruct(StructType* OldStructType, Module& M, std::vector<int> toPad) {
   std::vector<Type *> FieldTypes;
   // errs() << "PADDING STRUCT" << OldStructType->getName() << "\n";
   for (unsigned i = 0; i < OldStructType->getNumElements(); ++i) {
     FieldTypes.push_back(OldStructType->getElementType(i));
+    if (!toPad.size() || i != toPad[0]) {
+      continue;
+    }
+    toPad.erase(toPad.begin());
     Type *elementType = Type::getInt8Ty(M.getContext());
-    uint64_t arraySize = 64 - OldStructType->getElementType(i)->getPrimitiveSizeInBits()/8;
+    uint64_t padSize = 64 - OldStructType->getElementType(i)->getPrimitiveSizeInBits()/8;
     
     if (ArrayType* arrtype = dyn_cast<ArrayType>(OldStructType->getElementType(i))) {
       errs() << *OldStructType->getElementType(i) << "\n";
-      arraySize = 64 - (arrtype->getNumElements() * arrtype->getElementType()->getPrimitiveSizeInBits()/8);
+      padSize = 64 - (arrtype->getNumElements() * arrtype->getElementType()->getPrimitiveSizeInBits()/8);
     }
     if (true) {
-      ArrayType *arrayType = ArrayType::get(elementType, arraySize);
+      ArrayType *arrayType = ArrayType::get(elementType, padSize);
       FieldTypes.push_back(arrayType);
     }
   }
@@ -60,9 +64,29 @@ namespace {
   struct FsharingPass : public PassInfoMixin<FsharingPass> {
       PreservedAnalyses run(Module &M, ModuleAnalysisManager &) {
         auto structlist = M.getIdentifiedStructTypes();
+
+        std::ifstream file ("padding.txt");
+        std::string line, structTypeName;
+        std::unordered_map<std::string, std::vector<int> > structOrder;
+        
+        while (getline(file, line)) {
+          errs() << "READING LINE FROM PADDING.TXT\n";
+          std::istringstream ss {line};
+          ss >> structTypeName;
+          structOrder[structTypeName] = {};
+          int offset;
+          while (ss >> offset) {
+            errs() << offset << " ";
+            structOrder[structTypeName].push_back(offset);
+          }   
+          errs() << "\n";       
+        }
+
         for (StructType* st : structlist) {
           // TODO get all labels of functions in the struct 
-          padStruct(st, M);
+          if (auto iter = structOrder.find(st->getName().str()); iter != structOrder.end()) {
+            padStruct(st, M, iter->second);
+          }
         }
         return PreservedAnalyses::all();
       }

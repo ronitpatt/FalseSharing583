@@ -81,7 +81,7 @@ namespace {
 
 extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginInfo() {
   return {
-    LLVM_PLUGIN_API_VERSION, "GTPass", "v0.1",
+    LLVM_PLUGIN_API_VERSION, "GroupTPass", "v0.1",
     [](PassBuilder &PB) {
       PB.registerPipelineParsingCallback(
         [](StringRef Name, ModulePassManager &MPM,

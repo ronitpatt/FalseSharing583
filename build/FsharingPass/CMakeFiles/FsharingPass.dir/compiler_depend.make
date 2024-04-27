@@ -489,8 +489,19 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: ../FsharingPass/Pass.cpp \
   /usr/include/c++/11/bits/basic_ios.tcc \
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
-  /usr/include/c++/11/bits/istream.tcc
+  /usr/include/c++/11/bits/istream.tcc \
+  /usr/include/c++/11/sstream \
+  /usr/include/c++/11/bits/sstream.tcc \
+  /usr/include/c++/11/fstream \
+  /usr/include/c++/11/bits/codecvt.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+  /usr/include/c++/11/bits/fstream.tcc
 
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
 
 /usr/include/c++/11/istream:
 
@@ -505,6 +516,8 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: ../FsharingPass/Pass.cpp \
 /usr/include/c++/11/ostream:
 
 /usr/local/include/llvm/Support/DynamicLibrary.h:
+
+/usr/include/c++/11/sstream:
 
 /usr/local/include/llvm/Passes/PassPlugin.h:
 
@@ -708,6 +721,8 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: ../FsharingPass/Pass.cpp \
 
 /usr/local/include/llvm/IR/Type.h:
 
+/usr/include/c++/11/fstream:
+
 /usr/local/include/llvm/IR/DerivedTypes.h:
 
 /usr/local/include/llvm/IR/CallingConv.h:
@@ -733,6 +748,8 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: ../FsharingPass/Pass.cpp \
 /usr/local/include/llvm/ADT/Bitfields.h:
 
 /usr/local/include/llvm/ADT/simple_ilist.h:
+
+/usr/include/c++/11/bits/fstream.tcc:
 
 /usr/local/include/llvm/Analysis/LoopInfo.h:
 
@@ -1136,6 +1153,8 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: ../FsharingPass/Pass.cpp \
 
 /usr/include/c++/11/bits/stl_iterator.h:
 
+/usr/include/c++/11/bits/sstream.tcc:
+
 /usr/include/c++/11/climits:
 
 /usr/include/c++/11/new:
@@ -1237,6 +1256,8 @@ FsharingPass/CMakeFiles/FsharingPass.dir/Pass.cpp.o: ../FsharingPass/Pass.cpp \
 ../FsharingPass/Pass.cpp:
 
 /usr/include/c++/11/bits/hashtable_policy.h:
+
+/usr/include/c++/11/bits/codecvt.h:
 
 /usr/include/c++/11/bits/basic_ios.tcc:
 

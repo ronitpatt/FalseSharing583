@@ -6,8 +6,11 @@
 #include "llvm/IR/Instruction.h"
 #include  <iostream>
 #include  <set>
+#include  <vector>
 #include <map>
 #include "llvm/Support/raw_ostream.h"
+#include <sstream> 
+#include <fstream> 
 namespace llvm {
 class ReplaceTypeVisitor : public InstVisitor<ReplaceTypeVisitor> {
 private:
