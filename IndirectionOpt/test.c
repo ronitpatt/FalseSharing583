@@ -16,9 +16,10 @@ void* work1(void* arg) {
   for (int i = 0; i < strlen(word_two); i++){
     if (a == 1 && !(i % 2)) {       //evens and first thread
       word_two[i] = word_two[i] + 1;
-      // fprintf(stdout,"%c", word_two[i]);
+      fprintf(stdout,"%c", word_two[i]);
     } else if (a == 2 && (i % 2)) { //odds and second thread
       word_two[i] = word_two[i] + 2;
+      fprintf(stdout,"%c", word_two[i]);
     }
   }
   return NULL;
