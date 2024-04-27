@@ -40,6 +40,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
         Type *IntType = Type::getInt8Ty(Context);
         Type *IntPtrType = Type::getInt8PtrTy(Context);
         unsigned NumElements = AT->getNumElements();
+        errs() << NumElements << "\n";
 
         // Assuming the first element should be even-indexed
         unsigned NumOddElements = NumElements / 2;
@@ -149,7 +150,7 @@ PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM) {
                     // Remove the old GEP from the parent basic block
                     GEP->eraseFromParent();
 
-                    inst->eraseFromParent();
+                    //inst->eraseFromParent();
                   }
                 }
 
