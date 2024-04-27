@@ -3,9 +3,9 @@ source_filename = "profileGT.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.c = type { i32, i32, i32 }
+%struct.c = type { [16 x i32], [16 x i32], [16 x i32] }
 
-@arr = dso_local global [16 x %struct.c] zeroinitializer, align 16
+@obj = dso_local global %struct.c zeroinitializer, align 4
 @.str = private unnamed_addr constant [8 x i8] c"a = %d\0A\00", align 1
 
 ; Function Attrs: mustprogress noinline uwtable
@@ -31,31 +31,28 @@ for.cond:                                         ; preds = %for.inc, %entry
 for.body:                                         ; preds = %for.cond
   %4 = load i32, ptr %a, align 4
   %idxprom = sext i32 %4 to i64
-  %arrayidx = getelementptr inbounds [16 x %struct.c], ptr @arr, i64 0, i64 %idxprom
-  %a1 = getelementptr inbounds %struct.c, ptr %arrayidx, i32 0, i32 0
-  %5 = load i32, ptr %a1, align 4
+  %arrayidx = getelementptr inbounds [16 x i32], ptr @obj, i64 0, i64 %idxprom
+  %5 = load i32, ptr %arrayidx, align 4
   %inc = add nsw i32 %5, 1
-  store i32 %inc, ptr %a1, align 4
+  store i32 %inc, ptr %arrayidx, align 4
   %6 = load i32, ptr %a, align 4
-  %idxprom2 = sext i32 %6 to i64
-  %arrayidx3 = getelementptr inbounds [16 x %struct.c], ptr @arr, i64 0, i64 %idxprom2
-  %b = getelementptr inbounds %struct.c, ptr %arrayidx3, i32 0, i32 1
-  %7 = load i32, ptr %b, align 4
-  %inc4 = add nsw i32 %7, 1
-  store i32 %inc4, ptr %b, align 4
+  %idxprom1 = sext i32 %6 to i64
+  %arrayidx2 = getelementptr inbounds [16 x i32], ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 1), i64 0, i64 %idxprom1
+  %7 = load i32, ptr %arrayidx2, align 4
+  %inc3 = add nsw i32 %7, 1
+  store i32 %inc3, ptr %arrayidx2, align 4
   %8 = load i32, ptr %a, align 4
-  %idxprom5 = sext i32 %8 to i64
-  %arrayidx6 = getelementptr inbounds [16 x %struct.c], ptr @arr, i64 0, i64 %idxprom5
-  %c = getelementptr inbounds %struct.c, ptr %arrayidx6, i32 0, i32 2
-  %9 = load i32, ptr %c, align 4
-  %inc7 = add nsw i32 %9, 1
-  store i32 %inc7, ptr %c, align 4
+  %idxprom4 = sext i32 %8 to i64
+  %arrayidx5 = getelementptr inbounds [16 x i32], ptr getelementptr inbounds (%struct.c, ptr @obj, i32 0, i32 2), i64 0, i64 %idxprom4
+  %9 = load i32, ptr %arrayidx5, align 4
+  %inc6 = add nsw i32 %9, 1
+  store i32 %inc6, ptr %arrayidx5, align 4
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
   %10 = load i32, ptr %i, align 4
-  %inc8 = add nsw i32 %10, 1
-  store i32 %inc8, ptr %i, align 4
+  %inc7 = add nsw i32 %10, 1
+  store i32 %inc7, ptr %i, align 4
   br label %for.cond, !llvm.loop !6
 
 for.end:                                          ; preds = %for.cond

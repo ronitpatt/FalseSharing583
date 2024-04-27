@@ -2,35 +2,27 @@
 #include <unistd.h>
 #include "pthread.h"
 
-// struct c {
-//   int a[16];
-//   int b[16];
-//   int c[16];
-// };
-// c obj;
-
 struct c {
-  int a;
-  int b;
-  int c;
+  int a[16];
+  int b[16];
+  int c[16];
 };
+c obj;
 
-c arr[16];
 
 void* work1(void* arg) {
   int a = *((int *) arg);
   printf("a = %d\n", a);
   for (int i = 0; i < 1000000; i++){
-    arr[a].a++;
-    arr[a].b++;
-    arr[a].c++;
+    obj.a[a]++;
+    obj.b[a]++;
+    obj.c[a]++;
   }
   return nullptr;
 }
 
 
-int main()
-{
+int main() {
   pthread_t ptid1, ptid2, ptid3; 
   int a = 0, b = 1, c = 2;
 
