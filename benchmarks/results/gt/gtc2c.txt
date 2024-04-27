@@ -1,0 +1,77 @@
+=================================================
+            Trace Event Information              
+=================================================
+  Total records                     :        274
+  Locked Load/Store Operations      :          1
+  Load Operations                   :         29
+  Loads - uncacheable               :          0
+  Loads - IO                        :          0
+  Loads - Miss                      :          0
+  Loads - no mapping                :          1
+  Load Fill Buffer Hit              :          4
+  Load L1D hit                      :         24
+  Load L2D hit                      :          0
+  Load LLC hit                      :          0
+  Load Local HITM                   :          0
+  Load Remote HITM                  :          0
+  Load Remote HIT                   :          0
+  Load Local DRAM                   :          0
+  Load Remote DRAM                  :          0
+  Load MESI State Exclusive         :          0
+  Load MESI State Shared            :          0
+  Load LLC Misses                   :          0
+  Load access blocked by data       :          0
+  Load access blocked by address    :          0
+  Load HIT Local Peer               :          0
+  Load HIT Remote Peer              :          0
+  LLC Misses to Local DRAM          :       -nan%
+  LLC Misses to Remote DRAM         :       -nan%
+  LLC Misses to Remote cache (HIT)  :       -nan%
+  LLC Misses to Remote cache (HITM) :       -nan%
+  Store Operations                  :        245
+  Store - uncacheable               :          0
+  Store - no mapping                :          0
+  Store L1D Hit                     :        227
+  Store L1D Miss                    :         18
+  Store No available memory level   :          0
+  No Page Map Rejects               :          0
+  Unable to parse data source       :          0
+
+=================================================
+    Global Shared Cache Line Event Information   
+=================================================
+  Total Shared Cache Lines          :          0
+  Load HITs on shared lines         :          0
+  Fill Buffer Hits on shared lines  :          0
+  L1D hits on shared lines          :          0
+  L2D hits on shared lines          :          0
+  LLC hits on shared lines          :          0
+  Load hits on peer cache or nodes  :          0
+  Locked Access on shared lines     :          0
+  Blocked Access on shared lines    :          0
+  Store HITs on shared lines        :          0
+  Store L1D hits on shared lines    :          0
+  Store No available memory level   :          0
+  Total Merged records              :          0
+
+=================================================
+                 c2c details                     
+=================================================
+  Events                            : cpu/mem-loads,ldlat=30/P
+                                    : cpu/mem-stores/P
+  Cachelines sort on                : Total HITMs
+  Cacheline data grouping           : offset,tid,iaddr
+
+=================================================
+           Shared Data Cache Line Table          
+=================================================
+#
+#        ----------- Cacheline ----------      Tot  ------- Load Hitm -------    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
+# Index             Address  Node  PA cnt     Hitm    Total  LclHitm  RmtHitm  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
+# .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
+#
+
+=================================================
+      Shared Cache Line Distribution Pareto      
+=================================================
+#

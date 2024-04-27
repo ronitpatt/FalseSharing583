@@ -1,0 +1,111 @@
+=================================================
+            Trace Event Information              
+=================================================
+  Total records                     :        962
+  Locked Load/Store Operations      :          0
+  Load Operations                   :         46
+  Loads - uncacheable               :          0
+  Loads - IO                        :          0
+  Loads - Miss                      :          0
+  Loads - no mapping                :          0
+  Load Fill Buffer Hit              :         14
+  Load L1D hit                      :          9
+  Load L2D hit                      :          0
+  Load LLC hit                      :         22
+  Load Local HITM                   :         14
+  Load Remote HITM                  :          0
+  Load Remote HIT                   :          0
+  Load Local DRAM                   :          1
+  Load Remote DRAM                  :          0
+  Load MESI State Exclusive         :          0
+  Load MESI State Shared            :          1
+  Load LLC Misses                   :          1
+  Load access blocked by data       :          0
+  Load access blocked by address    :          0
+  Load HIT Local Peer               :          0
+  Load HIT Remote Peer              :          0
+  LLC Misses to Local DRAM          :      100.0%
+  LLC Misses to Remote DRAM         :        0.0%
+  LLC Misses to Remote cache (HIT)  :        0.0%
+  LLC Misses to Remote cache (HITM) :        0.0%
+  Store Operations                  :        916
+  Store - uncacheable               :          0
+  Store - no mapping                :          0
+  Store L1D Hit                     :        237
+  Store L1D Miss                    :        679
+  Store No available memory level   :          0
+  No Page Map Rejects               :          2
+  Unable to parse data source       :          0
+
+=================================================
+    Global Shared Cache Line Event Information   
+=================================================
+  Total Shared Cache Lines          :          3
+  Load HITs on shared lines         :         38
+  Fill Buffer Hits on shared lines  :         11
+  L1D hits on shared lines          :          8
+  L2D hits on shared lines          :          0
+  LLC hits on shared lines          :         19
+  Load hits on peer cache or nodes  :          0
+  Locked Access on shared lines     :          0
+  Blocked Access on shared lines    :          0
+  Store HITs on shared lines        :        693
+  Store L1D hits on shared lines    :         19
+  Store No available memory level   :          0
+  Total Merged records              :        707
+
+=================================================
+                 c2c details                     
+=================================================
+  Events                            : cpu/mem-loads,ldlat=30/P
+                                    : cpu/mem-stores/P
+  Cachelines sort on                : Total HITMs
+  Cacheline data grouping           : offset,tid,iaddr
+
+=================================================
+           Shared Data Cache Line Table          
+=================================================
+#
+#        ----------- Cacheline ----------      Tot  ------- Load Hitm -------    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
+# Index             Address  Node  PA cnt     Hitm    Total  LclHitm  RmtHitm  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
+# .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
+#
+      0      0x5e994d25a2c0     0     567   42.86%        6        6        0      635       15      620        5      615        0        4        2        0         3        6         0        0         0         0
+      1      0x5e994d25a240     0      21   28.57%        4        4        0       31       11       20       10       10        0        2        4        0         1        4         0        0         0         0
+      2      0x5e994d25a280     0      42   28.57%        4        4        0       65       12       53        4       49        0        5        2        0         1        4         0        0         0         0
+
+=================================================
+      Shared Cache Line Distribution Pareto      
+=================================================
+#
+#        ----- HITM -----  ------- Store Refs ------  --------- Data address ---------                                             ---------- cycles ----------    Total       cpu                           Shared                        
+#   Num  RmtHitm  LclHitm   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt                    Tid        Code address  rmt hitm  lcl hitm      load  records       cnt            Symbol         Object       Source:Line  Node
+# .....  .......  .......  .......  .......  .......  ..................  ....  ......  .....................  ..................  ........  ........  ........  .......  ........  ................  .............  ................  ....
+#
+  ----------------------------------------------------------------------
+      0        0        6        5      615        0      0x5e994d25a2c0
+  ----------------------------------------------------------------------
+           0.00%   66.67%    0.00%    0.00%    0.00%                 0x4     0       1    50042:run_this_code      0x5e994d24a45d         0       139        80        5         1  [.] work1(void*)  run_this_code  work1(void*)+125   0
+           0.00%    0.00%   20.00%   34.47%    0.00%                 0x4     0       1    50042:run_this_code      0x5e994d24a46e         0         0         0      213         1  [.] work1(void*)  run_this_code  work1(void*)+142   0
+           0.00%   16.67%    0.00%    0.00%    0.00%                 0x8     0       1    50043:run_this_code      0x5e994d24a45d         0       118       128        5         1  [.] work1(void*)  run_this_code  work1(void*)+125   0
+           0.00%    0.00%   20.00%   30.08%    0.00%                 0x8     0       1    50043:run_this_code      0x5e994d24a46e         0         0         0      186         1  [.] work1(void*)  run_this_code  work1(void*)+142   0
+           0.00%   16.67%    0.00%    0.00%    0.00%                 0xc     0       1    50044:run_this_code      0x5e994d24a45d         0       117       138        5         1  [.] work1(void*)  run_this_code  work1(void*)+125   0
+           0.00%    0.00%   60.00%   35.45%    0.00%                 0xc     0       1    50044:run_this_code      0x5e994d24a46e         0         0         0      221         1  [.] work1(void*)  run_this_code  work1(void*)+142   0
+
+  ----------------------------------------------------------------------
+      1        0        4       10       10        0      0x5e994d25a240
+  ----------------------------------------------------------------------
+           0.00%   50.00%    0.00%    0.00%    0.00%                 0x4     0       1    50042:run_this_code      0x5e994d24a425         0       130        84        5         1  [.] work1(void*)  run_this_code  work1(void*)+69   0
+           0.00%    0.00%   20.00%   50.00%    0.00%                 0x4     0       1    50042:run_this_code      0x5e994d24a432         0         0         0        7         1  [.] work1(void*)  run_this_code  work1(void*)+82   0
+           0.00%   50.00%    0.00%    0.00%    0.00%                 0x8     0       1    50043:run_this_code      0x5e994d24a425         0       119         0        2         1  [.] work1(void*)  run_this_code  work1(void*)+69   0
+           0.00%    0.00%   30.00%   10.00%    0.00%                 0x8     0       1    50043:run_this_code      0x5e994d24a432         0         0         0        4         1  [.] work1(void*)  run_this_code  work1(void*)+82   0
+           0.00%    0.00%   50.00%   40.00%    0.00%                 0xc     0       1    50044:run_this_code      0x5e994d24a432         0         0         0        9         1  [.] work1(void*)  run_this_code  work1(void*)+82   0
+
+  ----------------------------------------------------------------------
+      2        0        4        4       49        0      0x5e994d25a280
+  ----------------------------------------------------------------------
+           0.00%    0.00%    0.00%   36.73%    0.00%                 0x4     0       1    50042:run_this_code      0x5e994d24a44e         0         0         0       18         1  [.] work1(void*)  run_this_code  work1(void*)+110   0
+           0.00%   25.00%    0.00%    0.00%    0.00%                 0x8     0       1    50043:run_this_code      0x5e994d24a440         0       297        96        2         1  [.] work1(void*)  run_this_code  work1(void*)+96    0
+           0.00%    0.00%   75.00%   28.57%    0.00%                 0x8     0       1    50043:run_this_code      0x5e994d24a44e         0         0         0       17         1  [.] work1(void*)  run_this_code  work1(void*)+110   0
+           0.00%   75.00%    0.00%    0.00%    0.00%                 0xc     0       1    50044:run_this_code      0x5e994d24a440         0       146       122        5         1  [.] work1(void*)  run_this_code  work1(void*)+96    0
+           0.00%    0.00%   25.00%   34.69%    0.00%                 0xc     0       1    50044:run_this_code      0x5e994d24a44e         0         0         0       18         1  [.] work1(void*)  run_this_code  work1(void*)+110   0
