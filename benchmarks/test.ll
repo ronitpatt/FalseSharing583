@@ -48,6 +48,7 @@ for.body:                                         ; preds = %for.cond
   %4 = load i32, ptr %front, align 4
   %inc = add nsw i32 %4, 1
   store i32 %inc, ptr %front, align 4
+  %call = call i32 @sched_yield() #5
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
@@ -59,6 +60,9 @@ for.inc:                                          ; preds = %for.body
 for.end:                                          ; preds = %for.cond
   ret ptr null
 }
+
+; Function Attrs: nounwind
+declare i32 @sched_yield() #3
 
 ; Function Attrs: mustprogress noinline nounwind uwtable
 define dso_local noundef ptr @_Z5work2Pv(ptr noundef %obj) #2 {
@@ -84,6 +88,7 @@ for.body:                                         ; preds = %for.cond
   %4 = load i32, ptr %back, align 4
   %inc = add nsw i32 %4, 1
   store i32 %inc, ptr %back, align 4
+  %call = call i32 @sched_yield() #5
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
@@ -97,7 +102,7 @@ for.end:                                          ; preds = %for.cond
 }
 
 ; Function Attrs: mustprogress noinline norecurse uwtable
-define dso_local noundef i32 @main() #3 {
+define dso_local noundef i32 @main() #4 {
 entry:
   %retval = alloca i32, align 4
   %a = alloca i32, align 4
@@ -121,15 +126,15 @@ entry:
 }
 
 ; Function Attrs: nounwind
-declare i32 @pthread_create(ptr noundef, ptr noundef, ptr noundef, ptr noundef) #4
+declare i32 @pthread_create(ptr noundef, ptr noundef, ptr noundef, ptr noundef) #3
 
 declare i32 @pthread_join(i64 noundef, ptr noundef) #1
 
 attributes #0 = { mustprogress noinline uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { mustprogress noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { mustprogress noinline norecurse uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { mustprogress noinline norecurse uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #5 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}

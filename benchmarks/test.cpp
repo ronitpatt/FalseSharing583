@@ -21,7 +21,7 @@ void* work (void* obj) {
     c* ptr = (c*)obj;
     ptr->front++;
     //ptr->front2++;
-    //sched_yield();
+    sched_yield();
     // printf("%d\n", ptr->front);
   }
   return nullptr;
@@ -32,7 +32,7 @@ void* work2 (void* obj) {
     // printf("inside thread\n");
     c* ptr = (c*)obj;
     ptr->back++;
-    //sched_yield();
+    sched_yield();
     // printf("%d\n", ptr->front);
   }
   return nullptr;
