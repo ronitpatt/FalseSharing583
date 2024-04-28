@@ -5,9 +5,10 @@ def parse_perf(filename):
         lines = infile.readlines()
 
     lines = [i.strip().replace("\n", "") for i in lines]
+
     index = lines.index("Shared Data Cache Line Table")
     lines = lines[index:]
-
+    
     index = lines.index("Shared Cache Line Distribution Pareto")
     lines = [i for i in lines[index+7:] if i!=""]
 

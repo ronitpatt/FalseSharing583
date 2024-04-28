@@ -17,7 +17,7 @@ elif [ $1 = "reorder" ]; then
     sh newrun.sh print $2
     LoadPass="ReorderPass"
     PassName="reorder-pass"
-    sh end.sh
+    sh end.sh perf.txt
 elif [ $1 = "print" ]; then
     LoadPass="PrintPass"
     PassName="print-pass"
@@ -32,7 +32,7 @@ fi
 echo "Running $PassName"
 cd ../build && make && cd ../benchmarks
 if [ $# -eq 2 ]; then
-    clang -emit-llvm -S $2 -Xclang -disable-O0-optnone -o  test.ll -std=c++11 -stdlib=libc++ -fno-discard-value-names
+    clang -emit-llvm -S $2 -Xclang -disable-O0-optnone -O0 -o  test.ll -std=c++11 -stdlib=libc++ -fno-discard-value-names
 fi
 opt -load-pass-plugin=../build/$LoadPass/$LoadPass.so -passes=$PassName test.ll -f > test.bc 
 llvm-dis test.bc -o test.ll.out
