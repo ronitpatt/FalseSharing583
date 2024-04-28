@@ -87,7 +87,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"GroupTPass\" \"IndirectionPass\" \"PrintPass\" \"ReorderPass\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"GroupTPass\" \"IndirectionPass\" \"PaddingPass\" \"PrintPass\" \"ReorderPass\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components

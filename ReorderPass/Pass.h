@@ -17,36 +17,20 @@ private:
     std::vector<int> newOffsets;
     
 public:
-    ReplaceTypeVisitor(StructType* Old, StructType* New, std::vector<int> &offsets) : oldType(Old), newType(New), newOffsets(offsets) {}
-
-    void visitInstruction(Instruction &I) {
-        // errs() << I << "\n";
-    }
-        
-    void visitAllocaInst(AllocaInst &AI) {
-    }    
+    ReplaceTypeVisitor(StructType* oldTypeArg, StructType* newTypeArg, std::vector<int> &offsets) : oldType(oldTypeArg), newType(newTypeArg), newOffsets(offsets) {}  
     
     void visitGetElementPtrInst(GetElementPtrInst &GEP) {
-        errs() << "---------\n";
-        errs() << "Before\n";
-    
-        errs() << GEP << "\n";
                 
         if (oldType == GEP.getSourceElementType()) {
             GEP.setSourceElementType(newType);
 
-            Value *offset_value = GEP.getOperand(2);
-            int64_t offset = dyn_cast<ConstantInt>(offset_value)->getSExtValue();
-            errs() << "Offset: " << offset << "\n";
-            errs() << "New Offset: " << newOffsets[offset] << "\n";
+            Value *offsetValue = GEP.getOperand(2);
+            int64_t offset = dyn_cast<ConstantInt>(offsetValue)->getSExtValue();
 
-            Type *new_offset_type = IntegerType::get(GEP.getContext(), 32); // check this
-            Constant *new_offset_constant = ConstantInt::get(new_offset_type, newOffsets[offset]); 
+            Type *newOffsetType = IntegerType::get(GEP.getContext(), 32);
+            Constant *newOffsetConstant = ConstantInt::get(newOffsetType, newOffsets[offset]); 
         
-            GEP.setOperand(2, new_offset_constant);
-
-            errs() << "After\n";
-            errs() << GEP << "\n";
+            GEP.setOperand(2, newOffsetConstant);
         }
     }
 

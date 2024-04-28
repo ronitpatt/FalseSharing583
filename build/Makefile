@@ -87,7 +87,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"FsharingPass\" \"GroupTPass\" \"IndirectionPass\" \"PrintPass\" \"ReorderPass\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"GroupTPass\" \"IndirectionPass\" \"PaddingPass\" \"PrintPass\" \"ReorderPass\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -214,43 +214,43 @@ RISCVTargetParserTableGen/fast:
 .PHONY : RISCVTargetParserTableGen/fast
 
 #=============================================================================
-# Target rules for targets named FsharingPass
+# Target rules for targets named PaddingPass
 
 # Build rule for target.
-FsharingPass: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 FsharingPass
-.PHONY : FsharingPass
+PaddingPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 PaddingPass
+.PHONY : PaddingPass
 
 # fast build rule for target.
-FsharingPass/fast:
-	$(MAKE) $(MAKESILENT) -f FsharingPass/CMakeFiles/FsharingPass.dir/build.make FsharingPass/CMakeFiles/FsharingPass.dir/build
-.PHONY : FsharingPass/fast
+PaddingPass/fast:
+	$(MAKE) $(MAKESILENT) -f PaddingPass/CMakeFiles/PaddingPass.dir/build.make PaddingPass/CMakeFiles/PaddingPass.dir/build
+.PHONY : PaddingPass/fast
 
 #=============================================================================
-# Target rules for targets named install-FsharingPass
+# Target rules for targets named install-PaddingPass
 
 # Build rule for target.
-install-FsharingPass: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-FsharingPass
-.PHONY : install-FsharingPass
+install-PaddingPass: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-PaddingPass
+.PHONY : install-PaddingPass
 
 # fast build rule for target.
-install-FsharingPass/fast:
-	$(MAKE) $(MAKESILENT) -f FsharingPass/CMakeFiles/install-FsharingPass.dir/build.make FsharingPass/CMakeFiles/install-FsharingPass.dir/build
-.PHONY : install-FsharingPass/fast
+install-PaddingPass/fast:
+	$(MAKE) $(MAKESILENT) -f PaddingPass/CMakeFiles/install-PaddingPass.dir/build.make PaddingPass/CMakeFiles/install-PaddingPass.dir/build
+.PHONY : install-PaddingPass/fast
 
 #=============================================================================
-# Target rules for targets named install-FsharingPass-stripped
+# Target rules for targets named install-PaddingPass-stripped
 
 # Build rule for target.
-install-FsharingPass-stripped: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-FsharingPass-stripped
-.PHONY : install-FsharingPass-stripped
+install-PaddingPass-stripped: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 install-PaddingPass-stripped
+.PHONY : install-PaddingPass-stripped
 
 # fast build rule for target.
-install-FsharingPass-stripped/fast:
-	$(MAKE) $(MAKESILENT) -f FsharingPass/CMakeFiles/install-FsharingPass-stripped.dir/build.make FsharingPass/CMakeFiles/install-FsharingPass-stripped.dir/build
-.PHONY : install-FsharingPass-stripped/fast
+install-PaddingPass-stripped/fast:
+	$(MAKE) $(MAKESILENT) -f PaddingPass/CMakeFiles/install-PaddingPass-stripped.dir/build.make PaddingPass/CMakeFiles/install-PaddingPass-stripped.dir/build
+.PHONY : install-PaddingPass-stripped/fast
 
 #=============================================================================
 # Target rules for targets named ReorderPass
@@ -422,21 +422,21 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... RISCVTargetParserTableGen"
 	@echo "... acc_gen"
-	@echo "... install-FsharingPass"
-	@echo "... install-FsharingPass-stripped"
 	@echo "... install-GroupTPass"
 	@echo "... install-GroupTPass-stripped"
 	@echo "... install-IndirectionPass"
 	@echo "... install-IndirectionPass-stripped"
+	@echo "... install-PaddingPass"
+	@echo "... install-PaddingPass-stripped"
 	@echo "... install-PrintPass"
 	@echo "... install-PrintPass-stripped"
 	@echo "... install-ReorderPass"
 	@echo "... install-ReorderPass-stripped"
 	@echo "... intrinsics_gen"
 	@echo "... omp_gen"
-	@echo "... FsharingPass"
 	@echo "... GroupTPass"
 	@echo "... IndirectionPass"
+	@echo "... PaddingPass"
 	@echo "... PrintPass"
 	@echo "... ReorderPass"
 .PHONY : help

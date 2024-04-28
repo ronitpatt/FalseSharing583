@@ -12,7 +12,7 @@
 
 namespace llvm {
 namespace {
-  void printThings(Module& M) {
+  void addPrints(Module& M) {
     for (auto &F : M) {
       if (F.getName().find("doPrint") != std::string::npos) {
         continue;
@@ -24,14 +24,11 @@ namespace {
 
   struct RPass : public PassInfoMixin<RPass> {
       PreservedAnalyses run(Module &M, ModuleAnalysisManager &) {
-        errs () << "HI\n"; 
-        printThings(M);
+        addPrints(M);
         return PreservedAnalyses::all();
       }
   };
 }
-
-
 
 extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginInfo() {
   return {

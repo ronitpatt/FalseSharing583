@@ -5,41 +5,22 @@ using namespace llvm;
 
 #include <stdio.h>
 
-size_t cache_line_size() {
-    FILE * p = 0;
-    p = fopen("/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size", "r");
-    unsigned int i = 0;
-    if (p) {
-        fscanf(p, "%d", &i);
-        fclose(p);
-    }
-    return i;
-}
-
-
 
 void replaceUsesInFunction(Function* func, StructType* oldType, StructType* newType, GlobalVariable* gv, GlobalVariable* old) {
     ReplaceTypeVisitor visitor{oldType, newType, gv, old};
     visitor.visit(func);
 }
 
-void replace_types(Module &M, StructType *oldStructType, StructType *newStructType, GlobalVariable* gv, GlobalVariable *old) {
-    // for (GlobalVariable &GV : M.globals()) {
-    //     if (GV.getType() == oldStructType) {
-        
-    //     }
-    // }
+void replaceTypes(Module &M, StructType *oldStructType, StructType *newStructType, GlobalVariable* gv, GlobalVariable *old) {
 
     for (auto &F : M) {
-      errs() << "Visiting " << F.getName() << "\n";
       replaceUsesInFunction(&F, oldStructType, newStructType, gv, old);
     }
 
 }
 
-void transposeStruct(StructType* OldStructType, Module& M) {
+void transposeStruct(StructType* oldStructType, Module& M) {
   std::vector<Type *> FieldTypes;
-  // errs() << "PADDING STRUCT" << OldStructType->getName() << "\n";
   GlobalVariable* gv;
   for (llvm::GlobalVariable &globalVar : M.globals()) {
     gv = &globalVar;
@@ -47,29 +28,26 @@ void transposeStruct(StructType* OldStructType, Module& M) {
   }
 
   int length = 0;
-  for (unsigned i = 0; i < OldStructType->getNumElements(); ++i) {
-    if (ArrayType* arrtype = dyn_cast<ArrayType>(OldStructType->getElementType(i))) {
+  for (unsigned i = 0; i < oldStructType->getNumElements(); ++i) {
+    if (ArrayType* arrtype = dyn_cast<ArrayType>(oldStructType->getElementType(i))) {
       length = arrtype->getNumElements();
       FieldTypes.push_back(arrtype->getElementType());
     }
   }
   
-  StructType *newStructType = StructType::create(M.getContext(), FieldTypes, OldStructType->getName().str() + "GT");
+  StructType *newStructType = StructType::create(M.getContext(), FieldTypes, oldStructType->getName().str() + "GT");
   ArrayType* newObjType = ArrayType::get(newStructType, length);
   llvm::ConstantAggregateZero *zeroInit = llvm::ConstantAggregateZero::get(newObjType);
   GlobalVariable* globalVar = new GlobalVariable(M, newObjType, false, GlobalValue::InternalLinkage, zeroInit , "transposed");
   globalVar->setAlignment(Align(16));
-  //globalVar->setExternallyInitialized(false);
-  errs() << "REPLACE TYPES CALLED " << globalVar->isExternallyInitialized()<< "\n";
   gv->replaceAllUsesWith(globalVar);
-  replace_types(M, OldStructType, newStructType, globalVar, gv);
+  replaceTypes(M, oldStructType, newStructType, globalVar, gv);
 }
 
 namespace {
   struct GroupTPass : public PassInfoMixin<GroupTPass> {
       PreservedAnalyses run(Module &M, ModuleAnalysisManager &) {
-        auto structlist = M.getIdentifiedStructTypes();
-        for (StructType* st : structlist) {
+        for (StructType* st : M.getIdentifiedStructTypes()) {
           transposeStruct(st, M);
         }
         return PreservedAnalyses::all();
