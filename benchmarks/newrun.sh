@@ -11,13 +11,15 @@ if [ $1 = "group" ]; then
     LoadPass="GroupTPass"
     PassName="groupt-pass"
 elif [ $1 = "pad" ]; then
+    sh newrun.sh print $2
     LoadPass="FsharingPass"
     PassName="fsharing-pass"
+    sh end.sh perf.txt
 elif [ $1 = "reorder" ]; then
     sh newrun.sh print $2
     LoadPass="ReorderPass"
     PassName="reorder-pass"
-    sh end.sh perf.txt
+    sh end.sh perf.txt reorder
 elif [ $1 = "print" ]; then
     LoadPass="PrintPass"
     PassName="print-pass"

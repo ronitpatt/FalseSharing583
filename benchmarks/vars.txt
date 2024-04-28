@@ -1,0 +1,15 @@
+i32 retval 0x7ffffcae876c
+i32 a 0x7ffffcae8768
+i32 base 0x7ffffcae8764
+i32 baaase 0x7ffffcae8760
+obj struct.c.2 0x7ffffcae875c
+obj struct.c.1 0x7ffffcae8758
+obj struct.c.0 0x7ffffcae8754
+i64 ptid1 0x7ffffcae8748
+i64 ptid2 0x7ffffcae8740
+ptr obj.addr 0x7b19b0ffee48
+i32 i 0x7b19b0ffee44
+ptr ptr 0x7b19b0ffee38
+ptr obj.addr 0x7b19b07fde48
+i32 i 0x7b19b07fde44
+ptr ptr 0x7b19b07fde38

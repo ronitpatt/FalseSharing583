@@ -3,14 +3,11 @@ source_filename = "reordertest.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.creorder = type { i32, i16, i32 }
-%struct.creorderpadded = type { i32, i16, [62 x i8], i32 }
-%struct.c = type { i32, i32, i16 }
+%struct.cpadded = type { i32, [60 x i8], i32, [60 x i8], i16 }
 
 @.str = private unnamed_addr constant [7 x i8] c"%s %p\0A\00", align 1
 @elements_per_thread = dso_local global i32 1000000, align 4
-@myGlobalVar = external global %struct.creorder
-@myGlobalVar.1 = external global %struct.creorderpadded
+@myGlobalVar = external global %struct.cpadded
 
 ; Function Attrs: mustprogress noinline uwtable
 define dso_local void @_Z7doPrintPcPv(ptr noundef %name, ptr noundef %thing) #0 {
@@ -47,12 +44,12 @@ for.body:                                         ; preds = %for.cond
   %2 = load ptr, ptr %obj.addr, align 8
   store ptr %2, ptr %ptr, align 8
   %3 = load ptr, ptr %ptr, align 8
-  %front = getelementptr inbounds %struct.creorderpadded, ptr %3, i32 0, i32 0
+  %front = getelementptr inbounds %struct.cpadded, ptr %3, i32 0, i32 0
   %4 = load i32, ptr %front, align 4
   %inc = add nsw i32 %4, 1
   store i32 %inc, ptr %front, align 4
   %5 = load ptr, ptr %ptr, align 8
-  %front2 = getelementptr inbounds %struct.creorderpadded, ptr %5, i32 0, i32 1
+  %front2 = getelementptr inbounds %struct.cpadded, ptr %5, i32 0, i32 4
   %6 = load i16, ptr %front2, align 4
   %inc1 = add i16 %6, 1
   store i16 %inc1, ptr %front2, align 4
@@ -92,7 +89,7 @@ for.body:                                         ; preds = %for.cond
   %2 = load ptr, ptr %obj.addr, align 8
   store ptr %2, ptr %ptr, align 8
   %3 = load ptr, ptr %ptr, align 8
-  %back = getelementptr inbounds %struct.creorderpadded, ptr %3, i32 0, i32 3
+  %back = getelementptr inbounds %struct.cpadded, ptr %3, i32 0, i32 2
   %4 = load i32, ptr %back, align 4
   %inc = add nsw i32 %4, 1
   store i32 %inc, ptr %back, align 4
@@ -116,13 +113,13 @@ entry:
   %a = alloca i32, align 4
   %base = alloca i32, align 4
   %baaase = alloca i32, align 4
-  %obj = alloca %struct.c, align 4
+  %obj = alloca %struct.cpadded, align 4
   %ptid1 = alloca i64, align 8
   %ptid2 = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %front = getelementptr inbounds %struct.creorderpadded, ptr %obj, i32 0, i32 0
+  %front = getelementptr inbounds %struct.cpadded, ptr %obj, i32 0, i32 0
   store i32 0, ptr %front, align 4
-  %back = getelementptr inbounds %struct.creorderpadded, ptr %obj, i32 0, i32 3
+  %back = getelementptr inbounds %struct.cpadded, ptr %obj, i32 0, i32 2
   store i32 0, ptr %back, align 4
   %call = call i32 @pthread_create(ptr noundef %ptid1, ptr noundef null, ptr noundef @_Z4workPv, ptr noundef %obj) #5
   %call1 = call i32 @pthread_create(ptr noundef %ptid2, ptr noundef null, ptr noundef @_Z5work2Pv, ptr noundef %obj) #5

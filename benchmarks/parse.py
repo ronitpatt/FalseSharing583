@@ -44,23 +44,33 @@ def parse_vars(filename):
 
 
 def reorder_struct(struct_vars):
-    struct_vars.sort(key=lambda x: x[1])
-    return [i[0] for i in struct_vars]
+    
+    sortedoffsets = [sorted(list(struct_vars[threadid])) for threadid in struct_vars]
+    res = []
+    newoffset = -1
+    topad = []
+    for region in sortedoffsets:
+        res += region
+        if newoffset > 0:
+            topad.append(newoffset)
+        newoffset += len(region)
+    print(struct_vars, res)
+    return res, topad
 
 false_shared_addresses = parse_perf(sys.argv[1])
 address_to_var = parse_vars(sys.argv[2])
 
-print(address_to_var)
-print(false_shared_addresses)
+print("Address", address_to_var)
+print("false shared addresse", false_shared_addresses)
 
 print("False shared addresses:")
-struct_map = defaultdict(list)
+struct_map = defaultdict(lambda: defaultdict(set))
 for i, tid in false_shared_addresses:
     if i in address_to_var:
         print(address_to_var[i], i, tid)
         if "struct." in address_to_var[i][1]:
             s = address_to_var[i][1].split(".")
-            struct_map[s[1]].append((s[2], tid))
+            struct_map[s[1]][tid].add(s[2])
     # else:
     #     before_i = [j for j in address_to_var if int(j, 16) < int(i, 16)]
     #     if len(before_i):
@@ -68,21 +78,34 @@ for i, tid in false_shared_addresses:
             
 print(struct_map)
 print("--- REORDERED STRUCTS ---")
-for key in struct_map:
-    with open("reorder.txt", "w") as outfile:
-        outfile.write("struct." + key + " " + ' '.join(reorder_struct(struct_map[key])))
-padding = {}
-for key in struct_map:
-    elements = struct_map[key]
-    threads = defaultdict(lambda:0)
-    for item in elements:
-        if int(item[0]) > threads[item[1]]:
-            threads[item[1]] = int(item[0])
-    paddingAfter = sorted([threads[key] for key in threads])[:-1]
-    print(paddingAfter)
-    padding[key] = [str(val) for val in paddingAfter]
-print(padding)
+prefix = ""
+if len(sys.argv) == 4:
+    prefix = sys.argv[3]
+neworder = defaultdict(list)
+paddStruct = defaultdict(list)
 
-for key in padding:
+for key in struct_map:
+    neworder[key], paddStruct[key] = reorder_struct(struct_map[key])
+
+if "reordering" == prefix:
+    with open("reorder.txt", "w") as outfile:
+        for key in neworder:
+            outfile.write("struct." + key + " " + ' '.join(neworder[key]))
+        with open("padding.txt", 'w') as outfile:
+            outfile.write(f"struct.{key+prefix} "+ ' '.join(paddStruct[key]))
+    exit()
+padding = {}
+print(struct_map)
+print("neworder", neworder)
+for key in neworder:
+    topad = []
+    elements = neworder[key]
+    for i in range(1,len(elements)):
+        if int(elements[i]) != int(elements[i-1]) + 1:
+            topad.append(str(i-1))
+    print(topad)
+    padding[key] = topad
     with open("padding.txt", 'w') as outfile:
-        outfile.write(f"struct.{key}reorder "+ ' '.join(padding[key]))
+        outfile.write(f"struct.{key+prefix} "+ ' '.join(topad))
+
+    
