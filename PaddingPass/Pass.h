@@ -40,10 +40,12 @@ public:
     if (AI.getAllocatedType()->isArrayTy()) {
       Type *rettype = recur(AI.getAllocatedType());
       AI.setAllocatedType(rettype);
+      AI.setAlignment(Align(64));
     }
 
     if (AI.getAllocatedType() == oldType) {
       AI.setAllocatedType(newType);
+      AI.setAlignment(Align(64));
     }
   }
 

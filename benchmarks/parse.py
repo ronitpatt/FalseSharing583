@@ -65,13 +65,18 @@ print("Address", address_to_var)
 print("false shared addresse", false_shared_addresses)
 
 print("False shared addresses:")
+# structname : threadid : set of elements
 struct_map = defaultdict(lambda: defaultdict(set))
+# structname : element : threadid
+element_to_thread = defaultdict(lambda: defaultdict(int))
 for i, tid in false_shared_addresses:
     if i in address_to_var:
         print(address_to_var[i], i, tid)
         if "struct." in address_to_var[i][1]:
             s = address_to_var[i][1].split(".")
             struct_map[s[1]][tid].add(s[2])
+            element_to_thread[s[1]][s[2]] = tid
+
 
 
 print(struct_map)
@@ -96,12 +101,15 @@ if "reordering" == prefix:
 padding = {}
 print(struct_map)
 print("neworder", new_order)
+print("elementtothread", element_to_thread)
 
 for key in new_order:
     topad = []
+    # print
     elements = new_order[key]
     for i in range(1, len(elements)):
-        if int(elements[i]) != int(elements[i - 1]) + 1:
+        # print(element_to_thread[][str(elements[i])], element_to_thread[str(elements[i-1])])
+        if element_to_thread[key][str(i)] != element_to_thread[key][str(i-1)]:
             topad.append(str(i - 1))
     print(topad)
     padding[key] = topad

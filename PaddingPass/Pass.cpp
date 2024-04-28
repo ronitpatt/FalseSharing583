@@ -28,15 +28,17 @@ void replaceTypes(Module &M, StructType *oldStructType, StructType *newStructTyp
 
 void padStruct(StructType* oldStructType, Module& M, std::vector<int> toPad) {
   std::vector<Type *> fieldTypes;
+  int running = 0;
   for (unsigned i = 0; i < oldStructType->getNumElements(); ++i) {
     fieldTypes.push_back(oldStructType->getElementType(i));
+    running += oldStructType->getElementType(i)->getPrimitiveSizeInBits()/8;
     if (!toPad.size() || i != toPad[0]) {
       continue;
     }
     toPad.erase(toPad.begin());
     Type *elementType = Type::getInt8Ty(M.getContext());
-    uint64_t padSize = cacheLineSize() - oldStructType->getElementType(i)->getPrimitiveSizeInBits()/8;
-    
+    uint64_t padSize = cacheLineSize() - running;
+    running = 0;
     if (ArrayType* arrtype = dyn_cast<ArrayType>(oldStructType->getElementType(i))) {
       errs() << *oldStructType->getElementType(i) << "\n";
       padSize = cacheLineSize() - (arrtype->getNumElements() * arrtype->getElementType()->getPrimitiveSizeInBits()/8);

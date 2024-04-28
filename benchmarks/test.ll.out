@@ -3,7 +3,7 @@ source_filename = "reordertest.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.cpadded = type { i32, [60 x i8], i32, [60 x i8], i16 }
+%struct.cpadded = type { i32, [60 x i8], i32, [60 x i8], i16, i32, i32 }
 
 @.str = private unnamed_addr constant [7 x i8] c"%s %p\0A\00", align 1
 @elements_per_thread = dso_local global i32 1000000, align 4
@@ -113,7 +113,7 @@ entry:
   %a = alloca i32, align 4
   %base = alloca i32, align 4
   %baaase = alloca i32, align 4
-  %obj = alloca %struct.cpadded, align 4
+  %obj = alloca %struct.cpadded, align 64
   %ptid1 = alloca i64, align 8
   %ptid2 = alloca i64, align 8
   store i32 0, ptr %retval, align 4

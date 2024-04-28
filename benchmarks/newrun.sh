@@ -12,8 +12,8 @@ if [ $1 = "group" ]; then
     PassName="groupt-pass"
 elif [ $1 = "pad" ]; then
     sh newrun.sh print $2
-    LoadPass="FsharingPass"
-    PassName="fsharing-pass"
+    LoadPass="PaddingPass"
+    PassName="padding-pass"
     sh end.sh perf.txt
 elif [ $1 = "reorder" ]; then
     sh newrun.sh print $2

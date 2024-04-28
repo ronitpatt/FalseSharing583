@@ -10,7 +10,10 @@ struct c {
     int front;
     //char pad[60];
     int back;
+    
     short front2;
+    int a;
+    int hi;
   }; // is it ok to pad this inside struct
 
 int elements_per_thread = 1000000;
