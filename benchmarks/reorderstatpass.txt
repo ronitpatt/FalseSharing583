@@ -1,0 +1,28 @@
+
+ Performance counter stats for './run_this_code':
+
+          1,471.68 msec task-clock                       #    1.995 CPUs utilized             
+                21      context-switches                 #   14.269 /sec                      
+                 1      cpu-migrations                   #    0.679 /sec                      
+                69      page-faults                      #   46.885 /sec                      
+     5,256,098,934      cycles                           #    3.571 GHz                         (50.01%)
+     2,612,252,991      instructions                     #    0.50  insn per cycle              (62.51%)
+       415,221,221      branches                         #  282.140 M/sec                       (62.50%)
+         4,121,929      branch-misses                    #    0.99% of all branches             (62.50%)
+       732,996,477      L1-dcache-loads                  #  498.067 M/sec                       (62.49%)
+           640,202      L1-dcache-load-misses            #    0.09% of all L1-dcache accesses   (62.59%)
+            28,548      LLC-loads                        #   19.398 K/sec                       (50.36%)
+             8,563      LLC-load-misses                  #   30.00% of all L1-icache accesses   (50.08%)
+
+       0.737811415 seconds time elapsed
+
+       0.828058000 seconds user
+       0.644045000 seconds sys
+
+
+
+printpass ll, txt
+perfc2c txt
+executable output txt
+reordering output ll 
+padding output ll

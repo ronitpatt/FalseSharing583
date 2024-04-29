@@ -11,7 +11,9 @@ if [ $1 = "group" ]; then
     LoadPass="GroupTPass"
     PassName="groupt-pass"
 elif [ $1 = "pad" ]; then
-    sh newrun.sh print $2
+    if [ $# -eq 2 ]; then
+        sh newrun.sh print $2
+    fi
     LoadPass="PaddingPass"
     PassName="padding-pass"
     sh end.sh perf.txt
@@ -27,12 +29,12 @@ elif [ $1 = "indirection" ]; then
     LoadPass="IndirectionPass"
     PassName="indirection-pass"
 elif [ $1 = "nopass" ]; then
-    LoadPass="FsharingPass"
+    LoadPass="PrintPass"
     PassName=""
 fi
 
-echo "Running $PassName"
 cd ../build && make && cd ../benchmarks
+echo "Running $PassName"
 if [ $# -eq 2 ]; then
     clang -emit-llvm -S $2 -Xclang -disable-O0-optnone -O0 -o  test.ll -std=c++11 -stdlib=libc++ -fno-discard-value-names
 fi

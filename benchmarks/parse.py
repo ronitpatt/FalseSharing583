@@ -20,7 +20,7 @@ def parse_perf(filename):
             temp = lines.pop(0).split()
 
             if temp[0] != "0.00%" or temp[1] != "0.00%":
-                print(temp)
+                #print(temp)
                 colon_index = temp[8].index(":")
                 ans.append(
                     (
@@ -52,19 +52,19 @@ def reorder_struct(struct_vars):
     for region in sortedoffsets:
         res += region
         if newoffset > 0:
-            topad.append(newoffset)
+            topad.append(str(newoffset))
         newoffset += len(region)
-    print(struct_vars, res)
+    #print(struct_vars, res)
     return res, topad
 
 
 false_shared_addresses = parse_perf(sys.argv[1])
 address_to_var = parse_vars(sys.argv[2])
 
-print("Address", address_to_var)
+#print("Address", address_to_var)
 print("false shared addresse", false_shared_addresses)
 
-print("False shared addresses:")
+#print("False shared addresses:")
 # structname : threadid : set of elements
 struct_map = defaultdict(lambda: defaultdict(set))
 # structname : element : threadid
@@ -79,8 +79,8 @@ for i, tid in false_shared_addresses:
 
 
 
-print(struct_map)
-print("--- REORDERED STRUCTS ---")
+#print(struct_map)
+#print("--- REORDERED STRUCTS ---")
 prefix = ""
 if len(sys.argv) == 4:
     prefix = sys.argv[3]
@@ -89,19 +89,22 @@ pad_struct = defaultdict(list)
 
 for key in struct_map:
     new_order[key], pad_struct[key] = reorder_struct(struct_map[key])
+#print("prefix", prefix)
+#print(pad_struct)
 
-if "reordering" == prefix:
+if "reorder" == prefix:
     with open("reorder.txt", "w") as outfile:
         for key in new_order:
             outfile.write("struct." + key + " " + " ".join(new_order[key]))
-        with open("padding.txt", "w") as outfile:
+    with open("padding.txt", "w") as outfile:
+        for key in pad_struct:
             outfile.write(f"struct.{key+prefix} " + " ".join(pad_struct[key]))
     exit()
 
 padding = {}
-print(struct_map)
-print("neworder", new_order)
-print("elementtothread", element_to_thread)
+#print(struct_map)
+#print("neworder", new_order)
+#print("elementtothread", element_to_thread)
 
 for key in new_order:
     topad = []
@@ -111,7 +114,7 @@ for key in new_order:
         # print(element_to_thread[][str(elements[i])], element_to_thread[str(elements[i-1])])
         if element_to_thread[key][str(i)] != element_to_thread[key][str(i-1)]:
             topad.append(str(i - 1))
-    print(topad)
+    #print(topad)
     padding[key] = topad
     with open("padding.txt", "w") as outfile:
         outfile.write(f"struct.{key+prefix} " + " ".join(topad))

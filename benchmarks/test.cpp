@@ -21,7 +21,7 @@ void* work (void* obj) {
     c* ptr = (c*)obj;
     ptr->front++;
     //ptr->front2++;
-    sched_yield();
+    //sched_yield();
     // printf("%d\n", ptr->front);
   }
   return nullptr;
@@ -32,7 +32,7 @@ void* work2 (void* obj) {
     // printf("inside thread\n");
     c* ptr = (c*)obj;
     ptr->back++;
-    sched_yield();
+    //sched_yield();
     // printf("%d\n", ptr->front);
   }
   return nullptr;
@@ -63,6 +63,7 @@ int main()
 
   pthread_create(&ptid1, NULL, &work, (void*) &obj); 
   pthread_create(&ptid2, NULL, &work2, (void*) &obj); 
+  //pthread_create(&ptid2, NULL, &work2, (void*) &obj); 
 
   pthread_join(ptid1, NULL);
   pthread_join(ptid2, NULL);
