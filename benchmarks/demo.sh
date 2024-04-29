@@ -2,7 +2,7 @@
 # perfc2c txt - wanna show the perf output can do this with perf report, also show the print pass output, briefly say python script
 # reordering output ll  - make it stop after reordering is done show ll file that order is different, reorder.txt, padding.txt
 # padding output ll - show that final output is padded and reorered, 
-
+#sh ./demo.sh reorder reordertest.cpp 
 LoadPass=""
 PassName=""
 echo $# $1
